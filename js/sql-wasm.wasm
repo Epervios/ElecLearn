@@ -3,5 +3,5 @@
 // https://github.com/sql-js/sql.js/releases
 // Ce fichier est le binaire WebAssembly pour sql.js.
 // Ce fichier placeholder est vide et ne fonctionnera pas.
-// Il est juste créé pour que la structure du projet soit complète.
 // Le vrai fichier est un binaire.
+// Son absence ou un contenu incorrect empêchera sql.js de fonctionner.

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElecLearn - Apprentissage de l'Électrotechnique</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Configuration et chargement de MathJax -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Fin de l'intégration MathJax -->
+
+</head>
+<body>
+    <header>
+        <h1>ElecLearn</h1>
+        <nav>
+            <!-- La navigation sera générée par JavaScript (setupNavigation) -->
+        </nav>
+    </header>
+
+    <main>
+        <section id="accueil">
+            <h2>Bienvenue sur ElecLearn</h2>
+            <p>Votre plateforme pour maîtriser l'électrotechnique et préparer vos examens.</p>
+            <!-- Le bouton pour aller au sommaire sera ajouté ici par JS -->
+        </section>
+
+        <!-- La section fascicules n'est plus utilisée pour la navigation principale -->
+        <!-- <section id="fascicules-container" style="display: none;"> ... </section> -->
+
+        <!-- Cette section sera utilisée pour afficher la liste principale des chapitres (Sommaire) -->
+        <section id="chapitres-container" style="display: none;">
+            <h2 id="chapitres-titre">Sommaire Principal</h2>
+            <div id="chapitres-liste">
+                <!-- Les chapitres principaux (15 fiches) seront listés ici -->
+            </div>
+            <!-- Le bouton "Retour aux fascicules" n'est plus pertinent ici ou sera caché -->
+            <button id="retour-fascicules" style="display: none;">Retour aux fascicules</button>
+        </section>
+
+        <section id="contenu-chapitre-container" style="display: none;">
+            <h2 id="contenu-chapitre-titre"></h2>
+            <div id="contenu-chapitre-texte">
+                <!-- Le contenu du chapitre (fichier fX.html) sera affiché ici -->
+            </div>
+            <button id="lancer-quiz-chapitre">Lancer le Quiz du Chapitre</button>
+            <button id="retour-chapitres" class="secondary">Retour au Sommaire</button>
+        </section>
+
+        <section id="quiz-container" style="display: none;">
+            <h2 id="quiz-titre">Quiz</h2>
+            <div id="question-area"></div>
+            <div id="options-area"></div>
+            <div id="feedback-area"></div>
+            <button id="prochaine-question" style="display: none;">Question suivante</button>
+            <button id="terminer-quiz" style="display: none;">Terminer le Quiz</button>
+            <button id="retour-contenu-chapitre-quiz" class="secondary">Retour au Chapitre</button>
+            <!-- Ce bouton de retour devra peut-être aussi gérer le retour au sommaire si quiz général -->
+        </section>
+
+        <section id="resultats-quiz-container" style="display: none;">
+            <h2>Résultats du Quiz</h2>
+            <p id="score-final"></p>
+            <p id="recapitulatif-quiz"></p>
+            <button id="retour-contenu-chapitre-resultats" class="secondary">Retour au Chapitre</button>
+            <button id="retour-sommaire-resultats" class="secondary" style="display:none;">Retour au Sommaire</button>
+        </section>
+
+        <section id="glossaire-container" style="display: none;">
+            <h2>Glossaire</h2>
+            <input type="text" id="recherche-glossaire" placeholder="Rechercher un terme...">
+            <div id="glossaire-liste"></div>
+        </section>
+
+        <section id="progression-container" style="display: none;">
+            <h2>Ma Progression</h2>
+            <div id="progression-liste"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023-2024 ElecLearn</p>
+    </footer>
+
+    <script src="js/sql-wasm.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
