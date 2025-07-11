@@ -1,0 +1,328 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+    border-bottom: 3px solid #007bff; /* Accent color */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+header nav ul {
+    padding: 0;
+    list-style: none;
+    text-align: center;
+    margin-top: 10px;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 15px; /* Adjusted margin */
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1em;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+header nav a:hover {
+    background-color: #555;
+}
+
+header nav a.active {
+    background-color: #007bff; /* Active link style */
+    color: #fff;
+    font-weight: bold;
+}
+
+
+main {
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+    overflow: hidden;
+}
+
+section {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 15px; /* Added margin to section titles */
+}
+
+button, input[type="button"], input[type="submit"] { /* General button styling */
+    display: inline-block;
+    background: #007bff; /* Primary button color */
+    color: #fff;
+    border: none;
+    padding: 10px 20px; /* Increased padding */
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-right: 10px; /* Increased margin */
+    text-decoration: none;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:hover, input[type="button"]:hover, input[type="submit"]:hover {
+    background: #0056b3; /* Darker shade on hover */
+    transform: translateY(-1px); /* Slight lift on hover */
+}
+button:active, input[type="button"]:active, input[type="submit"]:active {
+    transform: translateY(0px); /* Pressed effect */
+}
+
+/* Specific button for "retour" or less emphasis */
+button.secondary {
+    background-color: #6c757d; /* Greyish color */
+}
+button.secondary:hover {
+    background-color: #545b62;
+}
+
+
+/* Styling for list items (Fascicules, Chapitres) */
+.fascicule-item, .chapitre-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.fascicule-item:hover, .chapitre-item:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+    border-left: 5px solid #007bff; /* Accent on hover */
+}
+
+.fascicule-item h3, .chapitre-item h4 {
+    margin-top: 0;
+    color: #007bff;
+}
+.fascicule-item p, .chapitre-item p {
+    color: #555;
+    font-size: 0.95em;
+}
+
+
+/* Glossaire specific list styling */
+#glossaire-liste dl dt {
+    font-weight: bold;
+    color: #007bff;
+    margin-top: 10px;
+}
+#glossaire-liste dl dd {
+    margin-left: 20px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    border-left: 3px solid #eee;
+}
+
+/* Progression/History specific list styling */
+.progression-items-list {
+    list-style: none;
+    padding: 0;
+}
+.progression-item {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+.progression-item h4 {
+    margin-top: 0;
+    color: #333;
+}
+.progression-item h4 em { /* Style for chapter title within fascicule title */
+    font-weight: normal;
+    color: #555;
+}
+.progression-item p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+.progression-item hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+}
+
+
+#contenu-chapitre-texte {
+    background-color: #fdfdfd;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    margin-top: 15px;
+}
+#contenu-chapitre-texte h3, #contenu-chapitre-texte h4 {
+    color: #007bff;
+}
+#contenu-chapitre-texte code {
+    background-color: #e9ecef;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+#contenu-chapitre-texte ul, #contenu-chapitre-texte ol {
+    padding-left: 20px;
+}
+
+
+#question-area {
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1.2em; /* Slightly larger question text */
+}
+
+.option-item { /* Replaces #options-area div for consistency */
+    padding: 12px; /* Increased padding */
+    border: 1px solid #ccc; /* Slightly darker border */
+    margin-bottom: 8px; /* Increased margin */
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.option-item:hover {
+    background-color: #e9ecef; /* Light grey hover */
+    border-color: #007bff;
+}
+.option-item.selected { /* Retained for potential use if selection without immediate validation was a feature */
+    background-color: #cce5ff;
+    border-color: #007bff;
+}
+.option-item.correct {
+    background-color: #d4edda;
+    border-color: #28a745; /* Success green */
+    color: #155724;
+    font-weight: bold;
+}
+.option-item.incorrect {
+    background-color: #f8d7da;
+    border-color: #dc3545; /* Danger red */
+    color: #721c24;
+    font-weight: bold;
+}
+/* Remove pointer events after selection */
+.option-item[style*="pointer-events: none;"] {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+.option-item[style*="pointer-events: none;"]:not(.correct):not(.incorrect):hover { /* If an item is disabled but not yet marked correct/incorrect */
+    background-color: #f8f9fa; /* Keep it very light */
+}
+
+
+#feedback-area {
+    margin-top: 20px; /* Increased margin */
+    padding: 15px; /* Increased padding */
+    border-radius: 5px;
+    font-size: 1.05em;
+}
+#feedback-area.correct { /* These are already good */
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid #28a745;
+}
+#feedback-area.incorrect { /* These are already good */
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid #dc3545;
+}
+#feedback-area p {
+    margin: 0;
+}
+#feedback-area p strong {
+    font-size: 1.1em;
+}
+
+#recherche-glossaire {
+    width: calc(100% - 22px);
+    padding: 12px; /* Increased padding */
+    margin-bottom: 20px; /* Increased margin */
+    border: 1px solid #ccc; /* Slightly darker border */
+    border-radius: 5px;
+    font-size: 1em;
+}
+#recherche-glossaire:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+
+/* Resultats Quiz Section */
+#resultats-quiz-container #score-final {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #007bff;
+}
+#resultats-quiz-container #recapitulatif-quiz {
+    font-size: 1.1em;
+    margin-top: 10px;
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #333;
+    color: #fff;
+    margin-top: 30px;
+    font-size: 0.9em;
+}
+
+/* Basic Responsiveness */
+@media (max-width: 768px) {
+    header nav ul li {
+        display: block; /* Stack navigation links */
+        margin: 10px 0;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    button, input[type="button"], input[type="submit"] {
+        padding: 10px 15px; /* Slightly smaller buttons on mobile */
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 2em;
+    }
+    h2 {
+        font-size: 1.3em;
+    }
+    /* Further reduce font sizes or padding if needed */
+}

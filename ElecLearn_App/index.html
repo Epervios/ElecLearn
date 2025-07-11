@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElecLearn - Apprentissage de l'Électrotechnique</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>ElecLearn</h1>
+        <nav>
+            <!-- La navigation sera ajoutée ici -->
+        </nav>
+    </header>
+
+    <main>
+        <section id="accueil">
+            <h2>Bienvenue sur ElecLearn</h2>
+            <p>Votre plateforme pour maîtriser l'électrotechnique.</p>
+        </section>
+
+        <section id="fascicules-container" style="display: none;">
+            <h2>Fascicules</h2>
+            <div id="fascicules-liste">
+                <!-- Les fascicules seront listés ici par JavaScript -->
+            </div>
+        </section>
+
+        <section id="chapitres-container" style="display: none;">
+            <h2 id="chapitres-titre">Chapitres</h2>
+            <div id="chapitres-liste">
+                <!-- Les chapitres du fascicule sélectionné seront listés ici -->
+            </div>
+            <button id="retour-fascicules">Retour aux fascicules</button>
+        </section>
+
+        <section id="contenu-chapitre-container" style="display: none;">
+            <h2 id="contenu-chapitre-titre"></h2>
+            <div id="contenu-chapitre-texte">
+                <!-- Le contenu du chapitre sera affiché ici -->
+            </div>
+            <button id="lancer-quiz">Lancer le Quiz</button>
+            <button id="retour-chapitres">Retour aux chapitres</button>
+        </section>
+
+        <section id="quiz-container" style="display: none;">
+            <h2 id="quiz-titre">Quiz</h2>
+            <div id="question-area">
+                <!-- La question actuelle sera affichée ici -->
+            </div>
+            <div id="options-area">
+                <!-- Les options de réponse seront affichées ici -->
+            </div>
+            <div id="feedback-area">
+                <!-- Feedback après réponse -->
+            </div>
+            <button id="prochaine-question" style="display: none;">Question suivante</button>
+            <button id="terminer-quiz" style="display: none;">Terminer le Quiz</button>
+            <button id="retour-contenu-chapitre-quiz">Retour au chapitre</button>
+        </section>
+
+        <section id="resultats-quiz-container" style="display: none;">
+            <h2>Résultats du Quiz</h2>
+            <p id="score-final"></p>
+            <p id="recapitulatif-quiz"></p>
+            <button id="retour-contenu-chapitre-resultats">Retour au chapitre</button>
+        </section>
+
+        <section id="glossaire-container" style="display: none;">
+            <h2>Glossaire</h2>
+            <input type="text" id="recherche-glossaire" placeholder="Rechercher un terme...">
+            <div id="glossaire-liste">
+                <!-- Les termes du glossaire seront listés ici -->
+            </div>
+        </section>
+
+        <section id="progression-container" style="display: none;">
+            <h2>Ma Progression</h2>
+            <div id="progression-liste">
+                <!-- L'historique des résultats des quiz sera affiché ici -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 ElecLearn</p>
+    </footer>
+
+    <!-- sql.js doit être chargé avant main.js si main.js l'utilise directement au chargement -->
+    <script src="js/sql-wasm.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
