@@ -1,0 +1,123 @@
+<!-- f10.html -->
+<h2>10. Courant alternatif monophasé</h2>
+
+<h3>10.1 Généralités</h3>
+<p>Le courant alternatif (CA) monophasé est omniprésent dans les réseaux de distribution d’électricité. Il alimente la plupart des appareils domestiques et industriels.  
+En Europe, la tension nominale domestique est de 230 V, 50 Hz.</p>
+
+<h3>10.2 Représentation d’un courant alternatif sinusoïdal</h3>
+<p>La sinusoïde est la forme la plus courante du courant alternatif : la tension ou le courant varie de façon régulière.
+<span class="math">\( U(t) = U_\text{max} \times \sin(\omega t + \varphi) \)</span>
+<ul>
+    <li><strong>Umax</strong> : valeur maximale (crête)</li>
+    <li><strong>&omega;</strong> : pulsation (rad/s)</li>
+    <li><strong>&varphi;</strong> : phase initiale</li>
+</ul>
+</p>
+
+<h3>10.3 Grandeurs et unités</h3>
+
+<h4>10.3.1 Période et fréquence</h4>
+<ul>
+    <li><strong>Période (T)</strong> : temps pour effectuer un cycle complet (en secondes, s)</li>
+    <li><strong>Fréquence (f)</strong> : nombre de cycles par seconde (en hertz, Hz) : <span class="math">\( f = \frac{1}{T} \)</span></li>
+</ul>
+
+<h4>10.3.2 Pulsation ou vitesse angulaire</h4>
+<ul>
+    <li><span class="math">\( \omega = 2\pi f \)</span> (en radians par seconde)</li>
+</ul>
+
+<h4>10.3.3 Valeur de crête</h4>
+<p>La valeur maximale atteinte par la tension ou le courant (Umax).</p>
+
+<h4>10.3.4 Valeur efficace</h4>
+<p>La valeur efficace (RMS, notée Ueff ou Irms) est la valeur qui produirait la même quantité de chaleur qu’un courant continu de même intensité.<br>
+<span class="math">\( U_\text{eff} = \frac{U_\text{max}}{\sqrt{2}} \)</span></p>
+
+<h4>10.3.5 Valeur instantanée</h4>
+<p>La valeur réelle à un instant donné : <span class="math">\( U(t) = U_\text{max} \times \sin(\omega t + \varphi) \)</span></p>
+
+<h3>10.4 Récepteur purement ohmique</h3>
+
+<h4>10.4.1 Résistance</h4>
+<p>Dans un circuit purement ohmique (résistance R), le courant et la tension sont en phase.</p>
+
+<h4>10.4.2 Puissance et énergie actives</h4>
+<p>La puissance active (P) consommée par la résistance est : <span class="math">\( P = U_\text{eff} \times I_\text{eff} = R \times I_\text{eff}^2 \)</span></p>
+
+<h3>10.5 Récepteur purement inductif</h3>
+
+<h4>10.5.1 Réactance d’induction</h4>
+<p>Une inductance s’oppose aux variations du courant : <span class="math">\( X_L = \omega L \)</span> (en ohms, Ω)</p>
+<ul>
+    <li>Le courant est en retard de 90° sur la tension.</li>
+</ul>
+
+<h4>10.5.2 Puissance et énergie réactives</h4>
+<p>La puissance fournie à une inductance est dite <strong>réactive</strong> : elle oscille entre la source et l’inductance sans être consommée.</p>
+
+<h3>10.6 Récepteur purement capacitif</h3>
+
+<h4>10.6.1 Réactance de capacité</h4>
+<p>Un condensateur s’oppose aux variations de tension : <span class="math">\( X_C = \frac{1}{\omega C} \)</span> (en ohms, Ω)</p>
+<ul>
+    <li>Le courant est en avance de 90° sur la tension.</li>
+</ul>
+
+<h4>10.6.2 Puissance et énergie réactives</h4>
+<p>Comme pour l’inductance, la puissance échangée est principalement réactive.</p>
+
+<h3>10.7 Calcul des tensions, courants et impédances en alternatif</h3>
+<p>Dans les circuits alternatifs, on utilise les notions d’<strong>impédance</strong> (Z), de phase et de composantes réelle (résistive) et imaginaire (réactive) pour effectuer les calculs.</p>
+
+<h3>10.8 Récepteur R-L en série</h3>
+<p>Association d’une résistance et d’une inductance. Le courant est déphasé par rapport à la tension.</p>
+
+<h3>10.9 Récepteur R-C en série</h3>
+<p>Association d’une résistance et d’un condensateur, également génératrice de déphasage.</p>
+
+<h3>10.10 Récepteur R-L-C en série</h3>
+<p>Association d’une résistance, d’une inductance et d’un condensateur : permet d’étudier le phénomène de résonance.</p>
+
+<h3>10.11 Récepteur R-L en parallèle</h3>
+<p>Montage parallèle résistance + inductance.</p>
+
+<h3>10.12 Récepteur R-C en parallèle</h3>
+<p>Montage parallèle résistance + condensateur.</p>
+
+<h3>10.13 Récepteur R-L-C en parallèle</h3>
+<p>Montage parallèle résistance + inductance + condensateur.</p>
+
+<h3>10.14 Cas général</h3>
+
+<h4>10.14.1 Raccordement d’un récepteur quelconque</h4>
+<p>Méthodes de raccordement et calculs pour tout type de récepteur monophasé.</p>
+
+<h4>10.14.2 Raccordement d’un ensemble de récepteurs</h4>
+<p>Calculs des courants, tensions et puissances pour plusieurs récepteurs en parallèle.</p>
+
+<h3>10.15 Amélioration du facteur de puissance</h3>
+
+<h4>10.15.1 Généralités</h4>
+<p>Le <strong>facteur de puissance</strong> (cos φ) indique la proportion de la puissance active dans la puissance apparente.</p>
+
+<h4>10.15.2 Amélioration du facteur de puissance</h4>
+<p>L’ajout de condensateurs permet de compenser la puissance réactive et d’améliorer le rendement de l’installation.</p>
+
+<h4>10.15.3 Puissance perdue en ligne</h4>
+<p>Des puissances sont perdues par effet Joule dans les câbles de transport du courant alternatif, surtout si le facteur de puissance est mauvais.</p>
+
+<h3>10.16 Chute de tension en ligne</h3>
+<p>Lorsque le courant traverse un câble, une partie de la tension est perdue à cause de la résistance du fil.</p>
+
+<h3>10.17 Comparaison des effets du courant alternatif et du courant continu</h3>
+<ul>
+    <li><strong>Effet calorifique</strong> : CA et CC produisent de la chaleur selon la même loi de Joule, mais la valeur efficace du CA doit être utilisée.</li>
+    <li><strong>Effet magnétique</strong> : Les courants alternatifs génèrent des champs magnétiques variables, alors que le CC crée un champ constant.</li>
+    <li><strong>Effet chimique</strong> : Le CC provoque l’électrolyse ; le CA n’a pas cet effet net.</li>
+    <li><strong>Effet lumineux</strong> : Effet identique si l’on considère la puissance moyenne.</li>
+    <li><strong>Effet piézo-électrique</strong> : Le CA peut générer des vibrations continues dans un cristal piézo-électrique.</li>
+    <li><strong>Effet électrostatique</strong> : Les tensions alternatives peuvent provoquer des effets électrostatiques fluctuants.</li>
+    <li><strong>Effet physiologique</strong> : Les deux types de courant peuvent être dangereux, mais le courant alternatif est plus susceptible de provoquer la fibrillation cardiaque à fréquence industrielle (50-60 Hz).</li>
+</ul>

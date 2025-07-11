@@ -1,0 +1,70 @@
+<!-- f13.html -->
+<h2>13. Moteurs à courant continu</h2>
+
+<h3>13.1 Généralités</h3>
+
+<h4>13.1.1 Définition</h4>
+<p>Un moteur à courant continu (CC ou DC) convertit l’énergie électrique continue en énergie mécanique de rotation.</p>
+
+<h4>13.1.2 Constitution (moteur élémentaire)</h4>
+<p>Un moteur CC comprend :
+<ul>
+    <li>Un stator (partie fixe, génère le champ magnétique)</li>
+    <li>Un rotor ou induit (partie mobile, parcourue par le courant)</li>
+    <li>Un collecteur (ou commutateur) et des balais pour inverser le courant dans le rotor au cours de la rotation</li>
+</ul>
+</p>
+
+<h4>13.1.3 Principe de fonctionnement</h4>
+<p>Le courant traverse le rotor placé dans le champ magnétique du stator. Une force (force de Laplace) s’exerce sur les conducteurs, entraînant la rotation du rotor.</p>
+
+<h4>13.1.4 Force contre-électromotrice</h4>
+<p>Lorsque le rotor tourne, il génère une tension qui s’oppose à la tension d’alimentation : c’est la force contre-électromotrice (f.c.é.m.). Elle limite le courant absorbé à vitesse normale.</p>
+
+<h4>13.1.5 Fréquence de rotation du moteur</h4>
+<p>La vitesse dépend de la tension appliquée, de la charge, et de la configuration du moteur (excitation série, shunt, etc.).</p>
+
+<h4>13.1.6 Démarrage</h4>
+<p>Au démarrage, la f.c.é.m. est nulle : le courant d’appel est très élevé. Il faut donc limiter ce courant par des résistances ou des dispositifs spécifiques.</p>
+
+<h4>13.1.7 Pôles de commutation</h4>
+<p>Petits pôles intermédiaires qui facilitent la commutation du courant dans le rotor et réduisent les étincelles.</p>
+
+<h4>13.1.8 Pôles de compensation</h4>
+<p>Ils servent à compenser l’effet du courant dans l’induit et améliorent le fonctionnement du moteur sous forte charge.</p>
+
+<h4>13.1.9 Rendement</h4>
+<p>Le rendement d’un moteur CC est le rapport entre la puissance mécanique utile délivrée et la puissance électrique absorbée.</p>
+
+<h4>13.1.10 Entretien</h4>
+<p>Les moteurs CC nécessitent un entretien régulier : nettoyage des balais et du collecteur, vérification de l’isolation, graissage des paliers.</p>
+
+<h3>13.2 Genres de moteurs à courant continu</h3>
+
+<h4>13.2.1 Moteur à excitation séparée</h4>
+<p>Le circuit d’excitation (bobine du stator) est alimenté indépendamment du circuit de l’induit.</p>
+
+<h4>13.2.2 Moteur série</h4>
+<p>Le courant d’excitation et le courant d’induit passent dans la même bobine. Ce moteur fournit un couple élevé au démarrage mais sa vitesse varie fortement selon la charge.</p>
+
+<h4>13.2.3 Moteur pas-à-pas</h4>
+<ul>
+    <li><strong>Généralités</strong> : Moteur qui avance par petits pas précis, souvent utilisé pour la commande numérique.</li>
+    <li><strong>Principe</strong> : Commande électronique alternant les bobinages, provoquant des mouvements angulaires précis.</li>
+    <li><strong>Construction et fonctionnement</strong> : Rotor denté et stator à bobinages multiples.</li>
+    <li><strong>Commande électronique des moteurs</strong> : Pilotage par microcontrôleur ou carte spécialisée.</li>
+    <li><strong>Avantages</strong> : Précision de positionnement, simplicité de contrôle.</li>
+    <li><strong>Inconvénients</strong> : Couple limité, vibrations possibles à basse vitesse.</li>
+</ul>
+
+<h4>13.2.4 Moteur à courant continu sans collecteur (brushless)</h4>
+<ul>
+    <li><strong>Généralités</strong> : Pas de balais, commutation électronique.</li>
+    <li><strong>Principe du moteur</strong> : Le rotor (aimanté) tourne grâce à des champs magnétiques tournants générés par l’électronique.</li>
+    <li><strong>Construction du moteur DC sans collecteur</strong> : Rotor à aimants permanents, stator bobiné, électronique de commande.</li>
+    <li><strong>Construction du moteur synchrone auto-piloté</strong> : Type de brushless où la synchronisation se fait automatiquement via des capteurs ou la rétroaction sur le signal.</li>
+</ul>
+
+<h3>13.3 Dynamo</h3>
+<p>Une dynamo est une machine tournante qui convertit l’énergie mécanique en énergie électrique continue (principe inverse du moteur CC).</p>
+

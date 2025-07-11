@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initSQL().then(() => {
         if (window.db) {
             console.log("Base de données initialisée et prête.");
-            setupNavigation();
+            setupNavigation(); 
             // Par défaut, afficher l'accueil. Le sommaire sera chargé via clic.
-            showSection('accueil');
+            showSection('accueil'); 
         } else {
             console.error("L'objet window.db n'a pas été initialisé après initSQL().");
             // Afficher une erreur plus visible à l'utilisateur si la DB ne charge pas
@@ -40,12 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
+    
     const retourContenuChapitreResultatsBtn = document.getElementById('retour-contenu-chapitre-resultats');
     if (retourContenuChapitreResultatsBtn) {
         retourContenuChapitreResultatsBtn.addEventListener('click', () => showSection('contenuChapitre'));
     }
-
+    
     const retourSommaireResultatsBtn = document.getElementById('retour-sommaire-resultats');
     if(retourSommaireResultatsBtn){
         retourSommaireResultatsBtn.addEventListener('click', () => {
@@ -98,7 +98,7 @@ window.appState = {
     selectedChapitreId: null,       // ID du chapitre actuellement affiché ou quizé
     selectedChapitreTitre: null,
     selectedChapitreContenuPath: null,
-
+    
     // États pour le Quiz
     currentQuizType: null, // 'chapitre' ou 'general'
     quizQuestions: [],
@@ -175,17 +175,17 @@ function loadProgression() {
                 rq.total_questions,
                 rq.date_tentative,
                 rq.type_quiz,
-                c.titre AS chapitre_titre
+                c.titre AS chapitre_titre 
             FROM ResultatsQuiz rq
-            LEFT JOIN Chapitres c ON rq.chapitre_id = c.id
+            LEFT JOIN Chapitres c ON rq.chapitre_id = c.id 
             ORDER BY rq.date_tentative DESC;
         `;
         // LEFT JOIN pour s'assurer qu'on récupère aussi les quiz généraux où c.titre sera NULL
 
         const results = window.db.exec(query);
-
-        progressionListeDiv.innerHTML = '';
-
+        
+        progressionListeDiv.innerHTML = ''; 
+        
         if (results.length > 0 && results[0].values.length > 0) {
             const ul = document.createElement('ul');
             ul.className = 'progression-items-list';
@@ -198,11 +198,11 @@ function loadProgression() {
 
                 const li = document.createElement('li');
                 li.className = 'progression-item';
-
+                
                 const percentage = entry.total_questions > 0 ? (entry.score / entry.total_questions * 100).toFixed(1) : 0;
-                const dateTentative = new Date(entry.date_tentative).toLocaleString('fr-FR', {
-                    year: 'numeric', month: 'long', day: 'numeric',
-                    hour: '2-digit', minute: '2-digit'
+                const dateTentative = new Date(entry.date_tentative).toLocaleString('fr-FR', { 
+                    year: 'numeric', month: 'long', day: 'numeric', 
+                    hour: '2-digit', minute: '2-digit' 
                 });
 
                 let titrePrincipal = "";
@@ -229,7 +229,7 @@ function loadProgression() {
         console.log("Progression (historique des quiz) chargée.");
     } catch (err) {
         console.error("Erreur lors du chargement de la progression:", err);
-        progressionListeDiv.innerHTML = '<p>Erreur lors du chargement de l''historique des quiz.</p>';
+        progressionListeDiv.innerHTML = "<p>Erreur lors du chargement de l'historique des quiz.</p>";
     }
 }
 
@@ -265,28 +265,28 @@ function loadGlossaire(searchTerm = "") {
         if (searchTerm) {
             stmt.bind(params);
         }
-
-        glossaireListeDiv.innerHTML = '';
+        
+        glossaireListeDiv.innerHTML = ''; 
         let hasResults = false;
         const dl = document.createElement('dl');
 
         while(stmt.step()) {
             hasResults = true;
             const row = stmt.getAsObject();
-
+            
             const dt = document.createElement('dt');
             dt.textContent = row.terme;
-
+            
             const dd = document.createElement('dd');
             dd.textContent = row.definition;
-
+            
             // Optionnel: Afficher un lien vers le chapitre si chapitre_id est présent
             // Pour cela, il faudrait une autre requête pour obtenir le titre du chapitre, etc.
             // Ou stocker le titre du chapitre avec le terme si c'est une info souvent nécessaire.
             // if (row.chapitre_id) {
             //     dd.innerHTML += ` <small class="glossaire-chapitre-ref">(Réf. Chapitre ${row.chapitre_id})</small>`;
             // }
-
+            
             dl.appendChild(dt);
             dl.appendChild(dd);
         }
@@ -327,7 +327,7 @@ function showSection(sectionId) {
     Object.values(sections).forEach(section => {
         if (section) section.style.display = 'none';
     });
-
+    
     // Assurer que l'ancien conteneur de fascicules (si jamais il était utilisé) est caché
     // const fasciculesContainer = document.getElementById('fascicules-container');
     // if (fasciculesContainer) fasciculesContainer.style.display = 'none';
@@ -336,7 +336,7 @@ function showSection(sectionId) {
         sections[sectionId].style.display = 'block';
         window.appState.currentView = sectionId;
         console.log(`Affichage de la section: ${sectionId}`);
-
+        
         // Mettre à jour la classe active dans la navigation
         const navLinks = document.querySelectorAll('header nav a');
         navLinks.forEach(link => {
@@ -373,8 +373,8 @@ function setupNavigation() {
         voirSommaireBtn.textContent = "Commencer l'Apprentissage (Sommaire)";
         voirSommaireBtn.id = "btn-voir-sommaire";
         voirSommaireBtn.addEventListener('click', () => {
-            loadMainMenuChapitres();
-            showSection('chapitres');
+            loadMainMenuChapitres(); 
+            showSection('chapitres'); 
         });
         accueilSection.appendChild(voirSommaireBtn);
     }
@@ -395,8 +395,8 @@ function setupNavigation() {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const sectionIdTarget = e.target.dataset.section;
-
-                if (sectionIdTarget === 'chapitres') {
+                
+                if (sectionIdTarget === 'chapitres') { 
                     loadMainMenuChapitres();
                     showSection('chapitres');
                 } else if (sectionIdTarget === 'quiz_general') {
@@ -406,8 +406,8 @@ function setupNavigation() {
                     startGeneralQuiz(20); // Appel à la fonction qui sera créée
                     // showSection('quiz'); // Ou une section spécifique si différente
                 } else if (sectionIdTarget === 'glossaire') {
-                    loadGlossaire();
-                    document.getElementById('recherche-glossaire').value = '';
+                    loadGlossaire(); 
+                    document.getElementById('recherche-glossaire').value = ''; 
                     showSection('glossaire');
                 } else if (sectionIdTarget === 'progression') {
                     loadProgression();
@@ -427,34 +427,34 @@ function loadMainMenuChapitres() {
     }
 
     const chapitresListeDiv = document.getElementById('chapitres-liste');
-    const chapitresTitreH2 = document.getElementById('chapitres-titre');
+    const chapitresTitreH2 = document.getElementById('chapitres-titre'); 
 
     if (!chapitresListeDiv || !chapitresTitreH2) {
         console.error("Éléments DOM pour la liste principale des chapitres (#chapitres-liste ou #chapitres-titre) non trouvés.");
         return;
     }
 
-    chapitresTitreH2.textContent = "Sommaire Principal du Cours";
+    chapitresTitreH2.textContent = "Sommaire Principal du Cours"; 
     const retourFasciculesBtn = document.getElementById('retour-fascicules');
     if(retourFasciculesBtn) retourFasciculesBtn.style.display = 'none';
 
     try {
         // On récupère tous les chapitres avec fascicule_id = 1 (convention)
         const stmt = window.db.prepare("SELECT id, numero_chapitre, titre, contenu_path FROM Chapitres WHERE fascicule_id = 1 ORDER BY numero_chapitre");
-
-        chapitresListeDiv.innerHTML = '';
+        
+        chapitresListeDiv.innerHTML = ''; 
         let hasResults = false;
 
-        while(stmt.step()) {
+        while(stmt.step()) { 
             hasResults = true;
             const row = stmt.getAsObject();
-
+            
             const chapitreDiv = document.createElement('div');
-            chapitreDiv.className = 'chapitre-item';
+            chapitreDiv.className = 'chapitre-item'; 
             chapitreDiv.setAttribute('data-id', row.id);
-
+            
             const titreH3 = document.createElement('h3'); // Utiliser h3 pour les titres dans le sommaire
-            titreH3.textContent = `${row.titre}`;
+            titreH3.textContent = `${row.titre}`; 
             chapitreDiv.appendChild(titreH3);
 
             chapitreDiv.addEventListener('click', () => {
@@ -554,7 +554,7 @@ function startQuiz(chapitreId) {
             showSection('contenuChapitre');
             return;
         }
-
+        
         window.appState.quizQuestions.sort(() => Math.random() - 0.5); // Mélanger les questions
         window.appState.currentQuestionIndex = 0;
         window.appState.userScore = 0;
@@ -562,7 +562,7 @@ function startQuiz(chapitreId) {
 
         document.getElementById('prochaine-question').style.display = 'none';
         document.getElementById('terminer-quiz').style.display = 'none';
-
+        
         displayQuestion();
         showSection('quiz');
         console.log("Quiz de chapitre démarré avec", window.appState.quizQuestions.length, "questions.");
@@ -592,7 +592,7 @@ function startGeneralQuiz(numQuestions = 20) {
         const questionsStmt = window.db.prepare(`SELECT id, texte_question, explication FROM Questions ORDER BY RANDOM() LIMIT ${numQuestions}`);
         // Note: l'interpolation directe de numQuestions est généralement sûre si numQuestions est un nombre contrôlé par nous.
         // Pour une sécurité maximale, on pourrait binder, mais LIMIT ne prend pas de placeholder directement dans toutes les versions de SQLite via JS.
-
+        
         window.appState.quizQuestions = [];
         while (questionsStmt.step()) {
             const q = questionsStmt.getAsObject();
@@ -612,10 +612,10 @@ function startGeneralQuiz(numQuestions = 20) {
             showSection('accueil'); // Retour à l'accueil
             return;
         }
-
+        
         // Si moins de questions que demandé sont disponibles, ajuster totalQuestions
         window.appState.quizTotalQuestions = window.appState.quizQuestions.length;
-
+        
         console.log(`Quiz général démarré avec ${window.appState.quizTotalQuestions} questions (demandé: ${numQuestions}).`);
 
         window.appState.currentQuestionIndex = 0;
@@ -623,7 +623,7 @@ function startGeneralQuiz(numQuestions = 20) {
 
         document.getElementById('prochaine-question').style.display = 'none';
         document.getElementById('terminer-quiz').style.display = 'none';
-
+        
         displayQuestion();
         showSection('quiz');
 
@@ -642,10 +642,10 @@ function displayQuestion() {
     const terminerQuizBtn = document.getElementById('terminer-quiz');
 
     feedbackArea.innerHTML = '';
-    feedbackArea.className = '';
+    feedbackArea.className = ''; 
     prochaineQuestionBtn.style.display = 'none';
     terminerQuizBtn.style.display = 'none';
-    optionsArea.innerHTML = '';
+    optionsArea.innerHTML = ''; 
 
     if (window.appState.currentQuestionIndex < window.appState.quizQuestions.length) {
         const currentQ = window.appState.quizQuestions[window.appState.currentQuestionIndex];
@@ -653,11 +653,11 @@ function displayQuestion() {
 
         currentQ.options.forEach(opt => {
             const optionDiv = document.createElement('div');
-            optionDiv.className = 'option-item';
+            optionDiv.className = 'option-item'; 
             optionDiv.textContent = opt.texte_option;
             optionDiv.setAttribute('data-option-id', opt.id);
-            optionDiv.setAttribute('data-question-id', currentQ.id);
-
+            optionDiv.setAttribute('data-question-id', currentQ.id); 
+            
             optionDiv.addEventListener('click', handleOptionClick);
             optionsArea.appendChild(optionDiv);
         });
@@ -739,13 +739,13 @@ function nextQuestion() {
 function showQuizResults() {
     const scoreFinalP = document.getElementById('score-final');
     const recapQuizP = document.getElementById('recapitulatif-quiz');
-
+    
     const totalQuestions = window.appState.quizTotalQuestions;
     const score = window.appState.userScore;
     const percentage = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
-
+    
     scoreFinalP.textContent = `Votre score: ${score} / ${totalQuestions} (${percentage.toFixed(1)}%)`;
-
+    
     if (window.appState.currentQuizType === 'general') {
         recapQuizP.textContent = "Quiz général terminé.";
     } else {
@@ -761,7 +761,7 @@ function showQuizResults() {
     );
 
     // Gérer l'affichage des boutons de retour dans showSection
-    showSection('resultatsQuiz');
+    showSection('resultatsQuiz'); 
 }
 
 function saveQuizResult(chapitreId, score, totalQuestions, typeQuiz) {
@@ -788,10 +788,10 @@ function saveQuizResult(chapitreId, score, totalQuestions, typeQuiz) {
             ':total_questions': totalQuestions,
             ':type_quiz': typeQuiz
         });
-        stmt.step();
-        stmt.free();
+        stmt.step(); 
+        stmt.free(); 
         console.log(`Résultat du quiz (${typeQuiz}) enregistré: Chapitre ID ${chapitreId}, Score ${score}/${totalQuestions}`);
-
+        
         // Optionnel: Déclencher un rechargement de la section progression si elle est la vue active
         // ou si l'utilisateur navigue vers elle ensuite. Pour l'instant, elle se recharge au clic.
 

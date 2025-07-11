@@ -1,0 +1,146 @@
+<!-- f12.html -->
+<h2>12. Moteurs à courant alternatif</h2>
+
+<h3>12.1 Généralités</h3>
+
+<h4>12.1.1 Moment – Puissance</h4>
+<ul>
+    <li><strong>Moment d’une force</strong> : Le moment est le produit d’une force appliquée par la distance au point d’application (<span class="math">\( M = F \times d \)</span>), exprimé en newton-mètre (Nm).</li>
+    <li><strong>Moment d’un couple</strong> : Dans un moteur, deux forces égales et opposées créent un couple moteur, qui provoque la rotation de l’arbre.</li>
+</ul>
+
+<h4>12.1.2 Principe de la rotation synchrone et asynchrone</h4>
+<ul>
+    <li><strong>Rotation synchrone</strong> : le rotor tourne à la même fréquence que le champ tournant.</li>
+    <li><strong>Rotation asynchrone</strong> : le rotor tourne à une fréquence légèrement inférieure à celle du champ (phénomène de glissement).</li>
+</ul>
+
+<h4>12.1.3 Champ magnétique tournant</h4>
+<p>Un système triphasé crée un champ magnétique tournant dans le stator du moteur, qui entraîne le rotor.</p>
+
+<h4>12.1.4 Fréquence de rotation du champ tournant</h4>
+<p>La vitesse de rotation du champ dépend de la fréquence du réseau et du nombre de pôles du moteur :
+<span class="math">\( N = \frac{60 \times f}{p} \)</span>, où f = fréquence (Hz), p = nombre de paires de pôles.</p>
+
+<h4>12.1.5 Choix du genre de moteur</h4>
+<p>Le choix dépend des exigences : puissance, couple, vitesse, mode d’alimentation, etc.</p>
+
+<h3>12.2 Moteurs synchrones</h3>
+
+<h4>12.2.1 Généralités</h4>
+<p>Le rotor tourne à la même vitesse que le champ tournant. Utilisés comme moteurs ou alternateurs.</p>
+
+<h4>12.2.2 Moteurs synchrones triphasés</h4>
+<ul>
+    <li><strong>À excitation par électroaimants</strong> : Le rotor est alimenté pour créer un champ magnétique.</li>
+    <li><strong>À excitation par aimants permanents (autosynchrone)</strong> : Pas besoin d’alimentation externe du rotor : l’aimantation est permanente.</li>
+    <li><strong>Alternateur triphasé</strong> : Convertit l’énergie mécanique en électricité triphasée : c’est une machine synchrone utilisée en générateur.</li>
+</ul>
+
+<h4>12.2.3 Moteurs synchrones monophasés à excitation par aimants permanents</h4>
+<p>Utilisés dans les petits appareils (montres, instruments, etc.).</p>
+
+<h3>12.3 Moteurs asynchrones triphasés à cage d’écureuil</h3>
+
+<h4>12.3.1 Généralités</h4>
+<p>Les moteurs asynchrones à cage d’écureuil sont robustes, économiques et très répandus.</p>
+
+<h4>12.3.2 Constitution du moteur à cage d’écureuil</h4>
+<ul>
+    <li><strong>Le stator</strong> : Partie fixe : crée le champ magnétique tournant.</li>
+    <li><strong>Le rotor</strong> : Partie mobile : constitué de barres conductrices reliées aux extrémités (forme de cage d’écureuil).</li>
+</ul>
+
+<h4>12.3.3 Principe de fonctionnement</h4>
+<p>Le champ tournant induit un courant dans le rotor, qui crée à son tour un champ magnétique : le rotor est entraîné par le champ du stator.</p>
+
+<h4>12.3.4 Glissement</h4>
+<p>Le glissement est la différence relative entre la vitesse du champ tournant et celle du rotor.</p>
+
+<h4>12.3.5 Caractéristiques en démarrage direct</h4>
+<ul>
+    <li>Courant d’appel élevé au démarrage</li>
+    <li>Couple de démarrage important</li>
+</ul>
+
+<h4>12.3.6 Caractéristiques en marche nominale</h4>
+<ul>
+    <li>Vitesse quasi constante</li>
+    <li>Bon rendement</li>
+</ul>
+
+<h3>12.4 La protection des moteurs</h3>
+
+<h4>12.4.1 Généralités</h4>
+<p>Les moteurs doivent être protégés contre les défauts électriques et mécaniques.</p>
+
+<h4>12.4.2 Protection contre les courts-circuits</h4>
+<p>Fusibles, disjoncteurs : interrompent le circuit en cas de court-circuit.</p>
+
+<h4>12.4.3 Protection contre les surcharges</h4>
+<p>Relais thermiques : protègent contre l’échauffement excessif dû à une surcharge ou un blocage du rotor.</p>
+
+<h3>12.5 Démarrage des moteurs asynchrones triphasés à cage d’écureuil</h3>
+
+<h4>12.5.1 Généralités</h4>
+<p>Le démarrage direct n’est pas toujours possible pour les moteurs puissants (courant d’appel trop élevé).</p>
+
+<h4>12.5.2 Démarrage direct</h4>
+<p>Le moteur est branché directement au réseau.</p>
+
+<h4>12.5.3 Démarrage étoile-triangle</h4>
+<p>Le moteur démarre en couplage étoile (courant réduit), puis passe en triangle (puissance nominale).</p>
+
+<h4>12.5.4 Démarrage direct à inversion de sens</h4>
+<p>Permet d’inverser la rotation du moteur par permutation de deux phases.</p>
+
+<h4>12.5.5 Démarrage progressif électronique</h4>
+<p>Utilisation de variateurs de vitesse ou de démarreurs électroniques pour limiter le courant et augmenter progressivement la vitesse.</p>
+
+<h3>12.6 Réglage de la fréquence de rotation des moteurs asynchrones</h3>
+
+<h4>12.6.1 Généralités</h4>
+<p>La vitesse dépend de la fréquence du réseau et du nombre de pôles.</p>
+
+<h4>12.6.2 Réglage par commutation du nombre de paires de pôles</h4>
+<ul>
+    <li><strong>Moteur à deux vitesses, couplage Dahlander</strong></li>
+    <li><strong>Moteur à deux vitesses à enroulements statoriques séparés</strong></li>
+</ul>
+
+<h4>12.6.3 Réglage par variation de la fréquence du champ tournant</h4>
+<p>Utilisation de variateurs de fréquence pour adapter la vitesse à la demande.</p>
+
+<h3>12.7 Freinage des moteurs asynchrones triphasés à cage d’écureuil</h3>
+
+<h4>12.7.1 Généralités</h4>
+<p>Plusieurs méthodes pour freiner rapidement ou maintenir le moteur à l’arrêt.</p>
+
+<h4>12.7.2 Freinage par contre-courant</h4>
+<p>On inverse deux phases pour provoquer un couple opposé.</p>
+
+<h4>12.7.3 Freinage par courant continu</h4>
+<p>Injection de courant continu dans le stator pour immobiliser le rotor.</p>
+
+<h4>12.7.4 Frein électromagnétique</h4>
+<p>Ajout d’un système mécanique ou électrique pour freiner le moteur.</p>
+
+<h4>12.7.5 Freinage par renvoi d’énergie dans le réseau</h4>
+<p>Le moteur fonctionne temporairement en générateur pour restituer l’énergie au réseau.</p>
+
+<h3>12.8 Moteurs asynchrones monophasés</h3>
+
+<h4>12.8.1 Moteur monophasé à induction (enroulement auxiliaire)</h4>
+<p>Utilisé pour les petites puissances (outillage, électroménager, etc.).</p>
+
+<h4>12.8.2 Moteur asynchrone triphasé fonctionnant en monophasé</h4>
+<p>Par adjonction de condensateurs, on peut faire fonctionner un moteur triphasé sur une alimentation monophasée.</p>
+
+<h4>12.8.3 Moteur à pôles bagués</h4>
+<p>Le rotor comporte des bagues pour faciliter le démarrage.</p>
+
+<h4>12.8.4 Moteur universel</h4>
+<p>Fonctionne aussi bien en courant alternatif qu’en courant continu (ex. : perceuses, aspirateurs…).</p>
+
+<h3>12.9 Plaque signalétique des moteurs</h3>
+<p>Plaque d’identification indiquant toutes les caractéristiques électriques et mécaniques du moteur : tension, courant, puissance, vitesse, cos φ, IP, etc.</p>

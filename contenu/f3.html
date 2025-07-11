@@ -1,0 +1,73 @@
+<!-- f3.html -->
+<h2>3. Résistance électrique – Couplages</h2>
+
+<h3>3.1 Résistivité</h3>
+<p>La <strong>résistivité</strong> (symbole&nbsp;: &rho;, en ohm-mètre [Ω·m]) est une propriété des matériaux qui indique dans quelle mesure ils s’opposent au passage du courant électrique.</p>
+<ul>
+    <li>Plus la résistivité d’un matériau est faible, meilleur conducteur il est (ex. : cuivre).</li>
+    <li>La résistivité dépend de la nature du matériau, mais aussi de sa température.</li>
+</ul>
+
+<h3>3.2 Résistance d’un conducteur</h3>
+<p>La résistance <strong>R</strong> d’un conducteur dépend de :</p>
+<ul>
+    <li>sa longueur (<strong>l</strong>, en mètres)</li>
+    <li>sa section (<strong>S</strong>, en mètres carrés)</li>
+    <li>la résistivité du matériau (<strong>&rho;</strong>)</li>
+</ul>
+<p>
+    <span class="math">\( R = \rho \times \frac{l}{S} \)</span>
+</p>
+<p>Un fil long ou fin offre plus de résistance qu’un fil court et épais, à matériau identique.</p>
+
+<h3>3.3 Couplages des résistances</h3>
+
+<h4>3.3.1 Résistance équivalente</h4>
+<p>La <strong>résistance équivalente</strong> est la résistance unique qui peut remplacer un ensemble de résistances sans modifier le comportement du circuit.</p>
+
+<h4>3.3.2 Couplage série</h4>
+<p>Lorsque les résistances sont branchées les unes à la suite des autres, on parle de <strong>montage en série</strong>.</p>
+<ul>
+    <li>Le courant est identique dans toutes les résistances.</li>
+    <li>La résistance totale (équivalente) est la somme des résistances :
+        <span class="math">\( R_\text{total} = R_1 + R_2 + R_3 + \ldots \)</span>
+    </li>
+</ul>
+
+<h4>3.3.3 Différence entre potentiel et tension</h4>
+<p>La <strong>différence de potentiel</strong> entre deux points est la quantité d’énergie transférée par unité de charge électrique.  
+La tension est une expression concrète de cette différence, souvent mesurée aux bornes d’un composant.</p>
+
+<h4>3.3.4 Applications – Série</h4>
+<ul>
+    <li><strong>Résistance additionnelle</strong>&nbsp;: Ajouter une résistance pour limiter le courant.</li>
+    <li><strong>Augmentation de l’étendue de mesure d’un voltmètre</strong>&nbsp;: Ajouter des résistances pour augmenter la plage de mesure.</li>
+    <li><strong>Chute de tension en ligne et résistance de ligne</strong>&nbsp;: Calculer les pertes de tension dues à la résistance des fils sur de longues distances.</li>
+</ul>
+
+<h4>3.3.5 Couplage parallèle</h4>
+<p>Lorsque les résistances sont branchées sur les mêmes bornes, on parle de <strong>montage en parallèle</strong>.</p>
+<ul>
+    <li>La tension est identique aux bornes de chaque résistance.</li>
+    <li>La résistance totale (équivalente) se calcule ainsi&nbsp;:<br>
+        <span class="math">\( \frac{1}{R_\text{total}} = \frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3} + \ldots \)</span>
+    </li>
+    <li>Le courant total est la somme des courants dans chaque branche.</li>
+</ul>
+
+<h4>3.3.6 Applications – Parallèle</h4>
+<ul>
+    <li><strong>Raccordement des récepteurs sur le réseau</strong>&nbsp;: Les appareils domestiques sont en général branchés en parallèle.</li>
+    <li><strong>Augmentation de l’étendue de mesure d’un ampèremètre</strong>&nbsp;: Ajouter des résistances en parallèle pour mesurer de plus grands courants.</li>
+</ul>
+
+<h4>3.3.7 Couplage mixte</h4>
+<p>Certains circuits comportent des résistances à la fois en série et en parallèle. On les appelle des <strong>circuits mixtes</strong>.<br>
+Pour trouver la résistance équivalente, il faut combiner les règles précédentes, en simplifiant le circuit étape par étape.</p>
+
+<h4>3.3.8 Applications – Couplage mixte</h4>
+<ul>
+    <li><strong>Diviseur de tension</strong>&nbsp;: Utilisé pour obtenir une tension réduite à partir d’une tension plus élevée.</li>
+    <li><strong>Potentiomètre</strong>&nbsp;: Résistance variable utilisée comme diviseur de tension réglable.</li>
+    <li><strong>Pont de Wheatstone</strong>&nbsp;: Montage utilisé pour mesurer précisément une résistance inconnue.</li>
+</ul>
