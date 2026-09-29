@@ -179,8 +179,12 @@ try {
   await quotaPage.route("https://cdn.jsdelivr.net/**",r=>r.fulfill({status:200,contentType:"application/javascript",body:""}));
   await quotaPage.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
   await quotaPage.waitForFunction(()=>document.querySelector("#library-storage")?.textContent?.includes("Stockage local actif"));
-  await quotaPage.locator("#library-file").setInputFiles({name:"manuel-lourd.pdf",mimeType:"application/pdf",buffer:Buffer.from("%PDF-1.4\n%%EOF")});
-  await quotaPage.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
+  await quotaPage.locator("#library-file").setInputFiles([
+    {name:"fiche-initiale.pdf",mimeType:"application/pdf",buffer:Buffer.from("%PDF-1.4\n%%EOF")},
+    {name:"manuel-lourd.pdf",mimeType:"application/pdf",buffer:Buffer.from("%PDF-1.4\n%%EOF")}
+  ]);
+  await quotaPage.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("2 PDF"));
+  assert.match(await quotaPage.locator("#library-documents").textContent(),/fiche-initiale\.pdf/);
   assert.match(await quotaPage.locator("#library-storage").textContent(),/temporaire/i);
   console.log("OK : quota saturé, le PDF reste consultable dans la session");
   await quotaCtx.close();

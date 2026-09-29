@@ -13,7 +13,7 @@ const themes=[
  ["Machines","Machines électriques","Champ magnétique, moteurs AC/DC et transformateurs.",[7,11,12,13,14],12]
 ];
 const categories=[...themes.map(t=>t[0]),"Examens","Autres"];
-let root=null,ready=false,connection=null,temporary=false,memory=new Map(),data=[],query="",topic="all",catalogQuery="",previewUrl=null;
+let root=null,ready=false,connection=null,temporary=false,memory=new Map(),data=[],query="",topic="all",catalogQuery="",previewUrl=null,inflight=new Map();
 const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n};
 const at=(s)=>root.querySelector(s);
 const normal=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
@@ -30,7 +30,7 @@ function classify(name){
  return "Autres";
 }
 function localOnly(error){
- if(!temporary)for(const doc of data)memory.set(doc.key,doc);
+ if(!temporary){for(const doc of data)memory.set(doc.key,doc);for(const doc of inflight.values())memory.set(doc.key,doc);}
  temporary=true;
  const box=at("#library-storage");
  if(box)box.textContent="Mode temporaire : vous pouvez consulter et importer des PDF, mais les nouveaux documents seront perdus au rechargement. "+(error?.message||"");
@@ -123,6 +123,7 @@ async function refresh(){
 async function importFiles(files){
  const incoming=[...files||[]],items=incoming.filter(f=>/\.pdf$/i.test(f.name)||f.type==="application/pdf"),zips=incoming.filter(f=>/\.zip$/i.test(f.name)||f.type==="application/zip");
  let imported=0,failures=[];
+ inflight.clear();
  if(!items.length&&!zips.length){status("Sélectionnez au moins un fichier PDF ou ZIP.",true);return}
  for(const file of zips){
    status("Extraction locale : "+file.name);
@@ -137,12 +138,15 @@ async function importFiles(files){
      const signature=await file.slice(0,5).text();
      if(signature!=="%PDF-")throw Error("En-tête PDF invalide");
      const key=(file._archivePath||file.name)+"::"+file.size+"::"+file.lastModified;
-     await storage("put",{key,name:file.name,blob:file,group:classify(file.name),year:(file.name.match(/20\d{2}/)||[])[0]||"",imported:Date.now()});
+     const doc={key,name:file.name,blob:file,group:classify(file.name),year:(file.name.match(/20\d{2}/)||[])[0]||"",imported:Date.now()};
+     await storage("put",doc);
+     inflight.set(key,doc);
      imported++;
    }catch(err){failures.push(file.name+" : "+(err.message||String(err)))}
  }
  at("#library-file").value="";
  await refresh();
+ inflight.clear();
  if(failures.length)status(imported+" PDF importés ; "+failures.length+" échec(s). "+failures.slice(0,2).join(" · "),true);
  else if(temporary)status(imported+" PDF ouverts en mode temporaire. Conservez vos originaux : ils disparaîtront de cette bibliothèque au rechargement.");
  else status(imported+" PDF importés et conservés localement dans ce navigateur.");
