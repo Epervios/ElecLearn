@@ -37,6 +37,7 @@ try {
   await page.locator("#course-list .chapter-card").first().click();
   await page.waitForSelector("#lesson-content .worked-panel");
   assert.equal(await page.locator("#lab-container:not([hidden])").count(),1);
+  assert.equal(await page.locator("#lesson-content .concept-figure svg").count(),1,"Illustration du chapitre visible");
   await checkOverflow("leçon FET 2");
   const before=await page.locator("#lab-container .lab-control output").first().textContent();
   await page.locator("#lab-container input[type=range]").first().evaluate(el=>{el.value="900";el.dispatchEvent(new Event("input",{bubbles:true}));});
@@ -65,6 +66,36 @@ try {
   await page.waitForSelector("#course-list .chapter-card");
   assert.equal(await page.locator("#course-list .chapter-card").count(),5);
   await checkOverflow("sommaire FET 3");
+
+  // La bibliothèque reste privée : import local simulé et suppression.
+  await page.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
+  await page.waitForSelector("#library-file");
+  await page.locator("#library-file").setInputFiles({
+    name:"2024_DT_PELE_donnee.pdf",mimeType:"application/pdf",
+    buffer:Buffer.from("%PDF-1.4\n1 0 obj<</Type/Catalog>>endobj\n%%EOF")
+  });
+  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 document"));
+  assert.match(await page.locator("#library-documents").textContent(),/Planificateur-électricien/);
+  await checkOverflow("bibliothèque privée");
+  await page.reload({waitUntil:"domcontentloaded"});
+  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 document"));
+  page.once("dialog",dialog=>dialog.accept());
+  await page.locator("#library-documents .document-actions button").last().click();
+  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("0 document"));
+  await page.locator('a[href="#/examens"]').first().click();
+  await page.waitForSelector("#exam-setup-form");
+  await page.locator("#exam-domain").selectOption("Mathématiques");
+  await page.locator("#exam-setup-form button[type=submit]").click();
+  for(let q=0;q<4;q++){
+    await page.waitForSelector("#exam-answers .quiz-option:not([disabled])");
+    await page.locator("#exam-answers .quiz-option").first().click();
+    assert(await page.locator("#exam-feedback").isVisible());
+    await page.locator("#exam-next").click();
+  }
+  await page.waitForSelector("#exam-host .result-panel");
+  assert((await page.evaluate(()=>JSON.parse(localStorage.getItem("ElecLearn.examHistory.v1"))||[])).length>0);
+  await checkOverflow("examens professionnels");
+
   if(name==="mobile"){
    await page.goto(url+"#/accueil",{waitUntil:"domcontentloaded"});
    await page.waitForSelector("#home-fascicules .fascicule-card");

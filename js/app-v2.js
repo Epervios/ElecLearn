@@ -99,6 +99,7 @@
       const p=progressFor(fet);
       const a=elt("a","fascicule-card fet-"+fet);a.href="#/cours?fet="+fet;
       a.append(elt("span","fet-no","F.E.T "+fet+" / "+FETS[fet].range),elt("h3","",FETS[fet].title),elt("p","",FETS[fet].desc));
+      if(window.ElecIllustrations){const preview=elt("div","fet-art");window.ElecIllustrations.render(({1:1,2:7,3:11})[fet],preview);a.append(preview);}
       const bottom=elt("div","card-bottom");bottom.append(elt("span","",p.visited+" parcourus · "+p.total+" chapitres"),elt("strong","",p.completed+"/"+p.total+" acquis →"));a.append(bottom);host.append(a);
     }
     const next=getChapter(state.lastChapter);
@@ -143,6 +144,11 @@
       const content=await response.text();
       if(request!==lessonRequest)return;
       $("lesson-content").innerHTML=content; // HTML de cours versionné dans ce dépôt
+      if(window.ElecIllustrations){
+        const host=elt("div","concept-figure-wrap");
+        window.ElecIllustrations.render(c.num,host);
+        $("lesson-content").insertBefore(host,$("lesson-content").querySelector("h3")||$("lesson-content").firstChild);
+      }
       if(c.num>=7 && window.ElecExtensions && window.ElecExtensions[c.num]){
         $("lesson-content").insertAdjacentHTML("beforeend",window.ElecExtensions[c.num]);
       }
@@ -320,7 +326,7 @@
     const host=$("glossary-list");host.replaceChildren();
     for(const item of data){const card=elt("div","glossary-entry");card.append(elt("dt","",item.term),elt("dd","",item.definition));host.append(card)}
     if(!data.length)host.append(elt("p","empty-message","Aucun terme trouvé."));
-    showView("glossaire","glossaire");
+    showView("glossaire","bibliotheque");
   }
   function updateNetwork(){
     const node=$("network-status");node.classList.toggle("offline",navigator.onLine===false);
@@ -341,6 +347,8 @@
     else if(view==="resultats")renderResults();
     else if(view==="progression")renderProgress();
     else if(view==="glossaire")renderGlossary();
+    else if(view==="bibliotheque"){showView("bibliotheque","bibliotheque");window.ElecLibrary?.mount($("library-host"));}
+    else if(view==="examens"){showView("examens","bibliotheque");window.ElecExams?.mount($("exam-host"));}
     else location.hash="#/accueil";
   }
   function init(){

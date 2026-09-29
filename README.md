@@ -86,3 +86,25 @@ La première visite nécessite un accès réseau pour installer le cache ; MathJ
 ### Vérification automatique en navigateur
 
 La CI GitHub exécute aussi un parcours Playwright en Chromium aux formats 1440, 820, 375 et 320 pixels. Celui-ci contrôle la navigation, l'absence de débordement horizontal, les laboratoires, les QCM, la persistance des résultats et l'accès à un cours en mode hors connexion. Une capture de l'accueil mobile est conservée comme artefact de CI. Pour l'exécuter localement, installer Playwright et Chromium, démarrer un serveur local puis lancer la commande npm run browser-test. Les contrôles Safari/iOS et les tests sur appareils physiques restent manuels.
+
+
+## Illustrations conceptuelles et entraînement métier
+
+- Quinze illustrations vectorielles originales et adaptatives : charges, Ohm, couplages, rendement, effet Joule, piles, induction, RC, mesure, alternatif, triphasé, machines AC/DC, transformateur et éclairage.
+- Les schémas sont des simplifications destinées à l'apprentissage, jamais des plans d'exécution ou des installations à reproduire sous tension.
+- 28 questions professionnelles inédites réparties en sept domaines : installations, énergie, principes de réglementation, réseaux, dessin, mathématiques, machines.
+- Le questionnaire professionnel ne reproduit pas les annales officielles et ne prétend pas être une épreuve de qualification officielle. Les règles réglementaires détaillées doivent être consultées dans leurs versions officielles applicables.
+
+## Bibliothèque privée de documents
+
+La nouvelle rubrique **Bibliothèque** permet d'importer ses propres fichiers PDF pour une consultation depuis l'appareil utilisé. Les fichiers complets sont stockés dans IndexedDB, et non dans GitHub, sur le serveur statique ou sur un compte ElecLearn. Ils peuvent être ouverts dans un aperçu intégré, recherchés et supprimés par l'utilisateur.
+
+Les neuf supports fournis pour la préparation couvrent les matériaux, la production, les installations, les contrôles OIBT, la télématique, les dessins professionnels (deux volumes), les mathématiques et le Workbook NIBT 2025. L'archive d'annales inventoriée contient **44 PDF d'épreuves de 2015 à 2024** : principalement les métiers d'électricien de montage CFC, avec une épreuve planificateur-électricien CFC de 2024. Le site ne contient **aucun de ces PDF** et ne contient pas d'extrait scanné, de schéma repris ou de corrigé reproduit.
+
+**Pour importer les annales ZIP :** décompressez d'abord l'archive sur votre ordinateur, puis utilisez « Sélectionner des PDF » en choisissant les fichiers souhaités. L'application ne traite que les PDF, pas les ZIP. Les fichiers importés ne sont visibles que dans le navigateur et le profil ayant réalisé l'importation. Ils ne sont pas synchronisés entre appareils.
+
+**Capacité :** certains supports numérisés dépassent 100 Mo. Le quota d'IndexedDB varie selon le navigateur et l'espace disponible ; une importation peut échouer avec un message « espace de stockage insuffisant ». Conservez toujours vos fichiers originaux hors du navigateur. La suppression des données du site peut effacer la bibliothèque. Pour une autre implantation, privilégier à terme une solution de bibliothèque privée sur un serveur autorisé.
+
+## Droits des supports de référence
+
+Plusieurs ouvrages de formation mentionnent explicitement une interdiction de reproduction, même partielle, sans autorisation écrite. Leur importation personnelle dans une session locale est distincte de leur publication sur le dépôt public. Les références fournies servent de trame thématique, mais aucun contenu des ouvrages, annales ou corrigés n'est ajouté tel quel au code public. Si des droits de diffusion sont obtenus, établir la provenance, la licence, la durée de mise à disposition et les obligations d'attribution avant toute nouvelle publication.

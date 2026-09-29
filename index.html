@@ -17,6 +17,10 @@
   <script defer src="js/questions.js"></script>
   <script defer src="js/labs.js"></script>
   <script defer src="js/approfondissements.js"></script>
+  <script defer src="js/illustrations.js"></script>
+  <script defer src="js/metier-questions.js"></script>
+  <script defer src="js/exams.js"></script>
+  <script defer src="js/library.js"></script>
   <script defer src="js/app-v2.js"></script>
 </head>
 <body>
@@ -32,7 +36,7 @@
         <a href="#/cours" data-nav="cours">Cours</a>
         <a href="#/quiz" data-nav="quiz">Révisions</a>
         <a href="#/progression" data-nav="progression">Progression</a>
-        <a href="#/glossaire" data-nav="glossaire">Glossaire</a>
+        <a href="#/bibliotheque" data-nav="bibliotheque">Bibliothèque</a>
       </nav>
       <span class="header-status" id="network-status" role="status">Cours disponibles</span>
     </header>
@@ -139,6 +143,26 @@
         <div id="progress-stats" class="stat-grid"></div><div id="progress-fascicules" class="progress-fascicules"></div>
         <div class="section-heading"><h2>Historique des révisions</h2><button id="clear-progress" class="btn btn-quiet" type="button">Effacer mes données</button></div>
         <div id="progress-history" class="history-list"></div>
+      </section>
+
+      <section id="bibliotheque" class="view" hidden aria-labelledby="library-title">
+        <div class="page-intro">
+          <p class="eyebrow">RESSOURCES PERSONNELLES</p>
+          <h1 id="library-title">Bibliothèque privée</h1>
+          <p>Retrouvez vos supports de formation et annales sur votre propre appareil. Les livres et sujets complets ne sont pas hébergés sur cette application publique.</p>
+          <div class="hero-actions"><a class="btn btn-primary" href="#/examens">Entraînement professionnel →</a><a class="btn btn-secondary" href="#/glossaire">Glossaire technique</a></div>
+        </div>
+        <div id="library-host"></div>
+      </section>
+
+      <section id="examens" class="view" hidden aria-labelledby="exam-title">
+        <div class="lesson-top"><a href="#/bibliotheque" class="back-link">← Bibliothèque privée</a><span class="tag">Questions inédites</span></div>
+        <div class="page-intro">
+          <p class="eyebrow">MISES EN SITUATION CFC</p>
+          <h1 id="exam-title">Entraînement professionnel</h1>
+          <p>Révisez les matériaux, les installations, le dessin, les mathématiques, les réseaux et les machines. Ces exercices indépendants ne reproduisent pas les examens officiels.</p>
+        </div>
+        <div id="exam-host"></div>
       </section>
 
       <section id="glossaire" class="view" hidden aria-labelledby="glossary-title">
