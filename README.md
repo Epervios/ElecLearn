@@ -82,3 +82,7 @@ La structuration du programme s'appuie sur les fascicules *Électrotechnique* de
 La première visite nécessite un accès réseau pour installer le cache ; MathJax est actuellement fourni par un CDN, donc son premier rendu entièrement hors connexion n'est pas garanti. La suppression des données du site ou une session privée peut effacer la progression locale. Les résultats historiques uniquement stockés en mémoire dans l'ancienne version ne sont pas récupérables après fermeture.
 
 **Projet :** ElecLearn · Wizardaring.
+
+### Vérification automatique en navigateur
+
+La CI GitHub exécute aussi un parcours Playwright en Chromium aux formats 1440, 820, 375 et 320 pixels. Celui-ci contrôle la navigation, l'absence de débordement horizontal, les laboratoires, les QCM, la persistance des résultats et l'accès à un cours en mode hors connexion. Une capture de l'accueil mobile est conservée comme artefact de CI. Pour l'exécuter localement, installer Playwright et Chromium, démarrer un serveur local puis lancer la commande npm run browser-test. Les contrôles Safari/iOS et les tests sur appareils physiques restent manuels.
