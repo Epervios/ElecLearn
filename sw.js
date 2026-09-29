@@ -1,5 +1,5 @@
 /* Ressources locales uniquement, aucun manuel PDF n'est distribué. */
-const CACHE = "eleclearn-v3-atlas-library-20260929";
+const CACHE = "eleclearn-v3-libraryfix-20260930";
 const ASSETS = [
   "./","./index.html","./css/style-v2.css","./manifest.webmanifest","./assets/icon.svg",
   "./js/app-v2.js","./js/questions.js","./js/labs.js","./js/approfondissements.js","./js/illustrations.js","./js/visual-atlas.js","./js/metier-questions.js","./js/exams.js","./js/library.js","./js/zip-reader.js","./js/sql-wasm.js","./js/sql-wasm.wasm",
@@ -30,6 +30,19 @@ self.addEventListener("fetch", event => {
         return response;
       }).catch(async () => (await caches.match(request)) || (await caches.match("./index.html")))
     );
+    return;
+  }
+  // Les scripts de la bibliothèque et la feuille de style peuvent être corrigés
+  // entre deux visites. On privilégie le réseau, avec repli sur le cache hors ligne.
+  const hotfix = /\/(?:js\/(?:library|app-v2|zip-reader)\.js|css\/style-v2\.css)$/.test(new URL(request.url).pathname);
+  if (hotfix) {
+    event.respondWith(fetch(request).then(response => {
+      if (response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE).then(cache => cache.put(request, copy)).catch(console.warn);
+      }
+      return response;
+    }).catch(() => caches.match(request)));
     return;
   }
   event.respondWith(caches.match(request).then(cached => cached || fetch(request).then(response => {

@@ -87,6 +87,8 @@ try {
   // La bibliothèque reste privée : import local simulé et suppression.
   await page.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
   await page.waitForSelector("#library-file");
+  await page.locator("#library-diagnostic").click();
+  await page.waitForFunction(()=>document.querySelector("#library-status")?.textContent?.includes("opérationnels"));
   assert.equal(await page.locator("#library-catalog .catalog-card").count(),7,"Sept matières communes disponibles immédiatement");
   assert.equal(await page.locator("#library-catalog .catalog-art svg").count(),7,"Matières déjà illustrées");
   await page.locator(".catalog-search input").fill("transformateur");
@@ -98,6 +100,10 @@ try {
   });
   await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
   assert.match(await page.locator("#library-documents").textContent(),/Examens/);
+  await page.locator("#library-documents .document-actions button").first().click();
+  assert(await page.locator("#library-preview iframe").isVisible(),"Aperçu PDF affiché");
+  assert((await page.locator("#library-preview iframe").getAttribute("src"))?.startsWith("blob:"),"URL de prévisualisation PDF");
+  await page.locator("#library-close").click();
   assert(!((await page.locator("#library-documents .document-info small").textContent()).includes("Planificateur")),"Documents mélangés par matière");
   await checkOverflow("bibliothèque privée");
   if(name==="mobile")await page.screenshot({path:"tests/artifacts/eleclearn-bibliotheque-mobile.png",fullPage:true});
@@ -154,7 +160,29 @@ try {
   });
   await fallback.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
   assert.equal(await fallback.locator("#library-documents .document-card").count(),1);
+  await fallback.locator("#library-diagnostic").click();
+  await fallback.waitForFunction(()=>document.querySelector("#library-status")?.textContent?.includes("temporaire"));
   console.log("OK : bibliothèque utilisable sans IndexedDB, import temporaire fonctionnel");
   await restricted.close();
+
+  // Le quota navigateur peut être atteint avec des manuels PDF volumineux.
+  // L'import doit alors basculer sur le mode temporaire au lieu d'échouer.
+  const quotaCtx=await browser.newContext({viewport:{width:375,height:812}});
+  await quotaCtx.addInitScript(()=>{
+    const native=IDBObjectStore.prototype.put;
+    IDBObjectStore.prototype.put=function(value,...rest){
+      if(value?.name==="manuel-lourd.pdf")throw new DOMException("Quota simulé","QuotaExceededError");
+      return native.call(this,value,...rest);
+    };
+  });
+  const quotaPage=await quotaCtx.newPage();
+  await quotaPage.route("https://cdn.jsdelivr.net/**",r=>r.fulfill({status:200,contentType:"application/javascript",body:""}));
+  await quotaPage.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
+  await quotaPage.waitForFunction(()=>document.querySelector("#library-storage")?.textContent?.includes("Stockage local actif"));
+  await quotaPage.locator("#library-file").setInputFiles({name:"manuel-lourd.pdf",mimeType:"application/pdf",buffer:Buffer.from("%PDF-1.4\n%%EOF")});
+  await quotaPage.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
+  assert.match(await quotaPage.locator("#library-storage").textContent(),/temporaire/i);
+  console.log("OK : quota saturé, le PDF reste consultable dans la session");
+  await quotaCtx.close();
 } finally {await browser.close();}
 console.log("Vérification navigateur : "+done+"/"+sizes.length+" formats.");

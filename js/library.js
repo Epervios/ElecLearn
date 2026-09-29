@@ -30,8 +30,10 @@ function classify(name){
  return "Autres";
 }
 function localOnly(error){
- temporary=true;const box=at("#library-storage");
- if(box)box.textContent="Stockage permanent indisponible. Les documents importés resteront accessibles jusqu'au rechargement ou à la fermeture de cette page. "+(error?.message||"");
+ if(!temporary)for(const doc of data)memory.set(doc.key,doc);
+ temporary=true;
+ const box=at("#library-storage");
+ if(box)box.textContent="Mode temporaire : vous pouvez consulter et importer des PDF, mais les nouveaux documents seront perdus au rechargement. "+(error?.message||"");
 }
 function openDatabase(){
  if(connection)return connection;
@@ -58,7 +60,6 @@ async function storage(op,value){
      tx.oncomplete=()=>resolve(answer);
    });
  }catch(err){
-   if(err?.name==="QuotaExceededError")throw err;
    localOnly(err);return storage(op,value);
  }
 }
@@ -114,10 +115,15 @@ function renderDocs(){
    controls.append(view,remove);card.append(info,controls);host.append(card);
  }
 }
-async function refresh(){data=await storage("all");renderDocs()}
+async function refresh(){
+ data=await storage("all");renderDocs();
+ const box=at("#library-storage");
+ if(box&&!temporary)box.textContent="Stockage local actif : vos PDF importés sont conservés dans ce navigateur.";
+}
 async function importFiles(files){
  const incoming=[...files||[]],items=incoming.filter(f=>/\.pdf$/i.test(f.name)||f.type==="application/pdf"),zips=incoming.filter(f=>/\.zip$/i.test(f.name)||f.type==="application/zip");
  let imported=0,failures=[];
+ if(!items.length&&!zips.length){status("Sélectionnez au moins un fichier PDF ou ZIP.",true);return}
  for(const file of zips){
    status("Extraction locale : "+file.name);
    try{
@@ -133,12 +139,13 @@ async function importFiles(files){
      const key=(file._archivePath||file.name)+"::"+file.size+"::"+file.lastModified;
      await storage("put",{key,name:file.name,blob:file,group:classify(file.name),year:(file.name.match(/20\d{2}/)||[])[0]||"",imported:Date.now()});
      imported++;
-   }catch(err){failures.push(file.name+" : "+(err.name==="QuotaExceededError"?"espace insuffisant":err.message))}
+   }catch(err){failures.push(file.name+" : "+(err.message||String(err)))}
  }
  at("#library-file").value="";
  await refresh();
  if(failures.length)status(imported+" PDF importés ; "+failures.length+" échec(s). "+failures.slice(0,2).join(" · "),true);
- else status(imported+" PDF importés. Tous les documents restent sur votre appareil.");
+ else if(temporary)status(imported+" PDF ouverts en mode temporaire. Conservez vos originaux : ils disparaîtront de cette bibliothèque au rechargement.");
+ else status(imported+" PDF importés et conservés localement dans ce navigateur.");
 }
 function mount(node){
  root=node;
@@ -164,6 +171,19 @@ function mount(node){
  preview.innerHTML='<div class="library-preview-head"><h3></h3><div><a class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Ouvrir en plein écran ↗</a><button type="button" class="btn btn-quiet" id="library-close">Fermer</button></div></div><iframe title="Aperçu de votre PDF" loading="lazy"></iframe>';
  const docs=el("div","library-documents");docs.id="library-documents";
  node.append(section,upload,toolbar,count,preview,docs);
+ const diagnostic=el("button","btn btn-secondary","Vérifier ma bibliothèque");
+ diagnostic.type="button";diagnostic.id="library-diagnostic";
+ diagnostic.addEventListener("click",async()=>{
+   status("Vérification du stockage en cours…");
+   try{
+     const key="__eleclearn_check__",blob=new Blob(["%PDF-1.4\n%%EOF"],{type:"application/pdf"});
+     await storage("put",{key,name:"test",blob,group:"Autres",year:"",imported:Date.now()});
+     await storage("delete",key);
+     await refresh();
+     status(temporary?"Catalogue opérationnel ; stockage permanent indisponible, import temporaire seulement.":"Catalogue, import et stockage local opérationnels.");
+   }catch(err){status("Diagnostic : "+(err?.message||err),true)}
+ });
+ upload.append(diagnostic);
  searchInput.addEventListener("input",e=>{catalogQuery=e.target.value;renderCatalog()});
  at("#library-search").addEventListener("input",e=>{query=e.target.value;renderDocs()});
  at("#library-group").addEventListener("change",e=>{topic=e.target.value;renderDocs()});

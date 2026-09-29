@@ -103,7 +103,7 @@ Les neuf supports fournis pour la préparation couvrent les matériaux, la produ
 
 **Pour importer les annales ZIP :** utilisez « PDF ou archive ZIP » et sélectionnez directement le fichier ZIP : les PDF qu’il contient sont décompressés puis classés sur votre appareil. Les ZIP classiques non chiffrés (méthode Store ou Deflate) sont pris en charge lorsque le navigateur supporte la décompression locale `deflate-raw`. Sur un navigateur incompatible, décompressez l’archive et importez les PDF en sélection multiple. Les fichiers importés ne sont visibles que dans le navigateur et le profil ayant réalisé l'importation. Ils ne sont pas synchronisés entre appareils.
 
-**Capacité :** certains supports numérisés dépassent 100 Mo. Le quota d'IndexedDB varie selon le navigateur et l'espace disponible ; une importation peut échouer avec un message « espace de stockage insuffisant ». Conservez toujours vos fichiers originaux hors du navigateur. La suppression des données du site peut effacer la bibliothèque. Pour une autre implantation, privilégier à terme une solution de bibliothèque privée sur un serveur autorisé.
+**Capacité :** certains supports numérisés dépassent 100 Mo. Le quota d'IndexedDB varie selon le navigateur et l'espace disponible : si l'import permanent échoue, la bibliothèque bascule en mode de consultation temporaire en l'indiquant clairement. Les documents importés en mode temporaire disparaissent au rechargement. Le bouton « Vérifier ma bibliothèque » affiche un diagnostic du stockage. Conservez toujours vos fichiers originaux hors du navigateur. La suppression des données du site peut effacer la bibliothèque. Pour une autre implantation, privilégier à terme une solution de bibliothèque privée sur un serveur autorisé.
 
 ## Droits des supports de référence
 
@@ -119,3 +119,9 @@ L’atlas visuel a été renforcé : **45 schémas SVG originaux au total**, ré
 La bibliothèque privée est désormais facultative : elle ajoute vos PDF/ZIP à des cours déjà utilisables. L'import fait apparaître un état de progression et des erreurs explicites. Si le stockage persistant du navigateur est bloqué, un mode temporaire permet de consulter les documents pendant la session, avec un avertissement. Deux PDF portant le même nom dans des sous-dossiers ZIP différents sont conservés distinctement grâce à leur chemin d'origine.
 
 La branche reste une PR en brouillon ; les changements ne sont pas automatiquement visibles sur le site publié tant qu'ils ne sont pas déployés.
+
+## Tester réellement la bibliothèque
+
+GitHub affiche le **code** du dépôt, pas une application web exécutable. Si GitHub Pages n'a pas été activé pour ce dépôt, une URL GitHub n'ouvre pas la bibliothèque. Lancement local depuis la racine du dépôt : `python -m http.server 8000`, puis `http://localhost:8000/#/bibliotheque` dans le navigateur. Pour l'accès public, activer **Settings → Pages** et choisir une source de publication (branche ou GitHub Actions) avant d'annoncer un lien de démonstration.
+
+Sur la page Bibliothèque : sept matières s'affichent sans PDF importé. Le bouton « Importer PDF ou ZIP » ajoute des documents **privés au navigateur courant**, pas au dépôt GitHub. Le bouton « Vérifier ma bibliothèque » renseigne la disponibilité du stockage ; si celui-ci est refusé ou saturé, la bibliothèque continue de fonctionner temporairement, sans persistance.

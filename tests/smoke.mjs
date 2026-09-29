@@ -86,3 +86,6 @@ assert(read('js/library.js').includes('Parcours commun')===false,"Vérification 
 assert(read('js/library.js').includes('Un seul programme, toutes professions'),"Catalogue pédagogique unifié non chargé");
 assert(read('js/library.js').includes('catalog-chapter'),"Accès direct aux cours absent");
 console.log('OK — 45 schémas originaux répartis dans les 15 chapitres, catalogue unifié.');
+
+assert.match(read('js/library.js'),/Vérifier ma bibliothèque/,"Diagnostic de stockage visible absent");
+assert.match(read('js/library.js'),/localOnly\(err\);return storage\(op,value\)/,"Repli temporaire sur erreur de quota absent");
