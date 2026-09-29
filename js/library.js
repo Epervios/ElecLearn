@@ -31,7 +31,7 @@ function classify(name){
 }
 function localOnly(error){
  temporary=true;const box=at("#library-storage");
- if(box)box.textContent="Stockage permanent indisponible. Les documents importés resteront accessibles uniquement jusqu'à la fermeture de cet onglet. "+(error?.message||"");
+ if(box)box.textContent="Stockage permanent indisponible. Les documents importés resteront accessibles jusqu'au rechargement ou à la fermeture de cette page. "+(error?.message||"");
 }
 function openDatabase(){
  if(connection)return connection;

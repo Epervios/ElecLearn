@@ -55,6 +55,7 @@ try {
   assert.equal(await page.locator("#lesson-content .concept-figure svg").count(),1,"Illustration principale visible");
   assert.equal(await page.locator("#lesson-content .atlas-card svg").count(),2,"Deux illustrations complémentaires par leçon");
   await checkOverflow("leçon FET 2");
+  if(name==="mobile")await page.screenshot({path:"tests/artifacts/eleclearn-lecon-mobile.png",fullPage:true});
   const before=await page.locator("#lab-container .lab-control output").first().textContent();
   await page.locator("#lab-container input[type=range]").first().evaluate(el=>{el.value="900";el.dispatchEvent(new Event("input",{bubbles:true}));});
   const after=await page.locator("#lab-container .lab-control output").first().textContent();
@@ -99,6 +100,7 @@ try {
   assert.match(await page.locator("#library-documents").textContent(),/Examens/);
   assert(!((await page.locator("#library-documents .document-info small").textContent()).includes("Planificateur")),"Documents mélangés par matière");
   await checkOverflow("bibliothèque privée");
+  if(name==="mobile")await page.screenshot({path:"tests/artifacts/eleclearn-bibliotheque-mobile.png",fullPage:true});
   await page.reload({waitUntil:"domcontentloaded"});
   await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
   page.once("dialog",dialog=>dialog.accept());
@@ -138,5 +140,21 @@ try {
   done++;
   await context.close();
  }
+  // Test de dégradation contrôlée : catalogue utilisable même sans IndexedDB.
+  const restricted=await browser.newContext({viewport:{width:375,height:812}});
+  await restricted.addInitScript(()=>Object.defineProperty(window,"indexedDB",{configurable:true,value:undefined}));
+  const fallback=await restricted.newPage();
+  await fallback.route("https://cdn.jsdelivr.net/**",r=>r.fulfill({status:200,contentType:"application/javascript",body:""}));
+  await fallback.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
+  await fallback.waitForSelector("#library-catalog .catalog-card");
+  assert.equal(await fallback.locator("#library-catalog .catalog-card").count(),7);
+  await fallback.waitForFunction(()=>document.querySelector("#library-storage")?.textContent?.includes("Stockage permanent indisponible"));
+  await fallback.locator("#library-file").setInputFiles({
+    name:"fiche-entrainement.pdf",mimeType:"application/pdf",buffer:Buffer.from("%PDF-1.4\\n%%EOF")
+  });
+  await fallback.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
+  assert.equal(await fallback.locator("#library-documents .document-card").count(),1);
+  console.log("OK : bibliothèque utilisable sans IndexedDB, import temporaire fonctionnel");
+  await restricted.close();
 } finally {await browser.close();}
 console.log("Vérification navigateur : "+done+"/"+sizes.length+" formats.");
