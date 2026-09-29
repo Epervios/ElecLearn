@@ -154,7 +154,7 @@ try {
   await fallback.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
   await fallback.waitForSelector("#library-catalog .catalog-card");
   assert.equal(await fallback.locator("#library-catalog .catalog-card").count(),7);
-  await fallback.waitForFunction(()=>document.querySelector("#library-storage")?.textContent?.includes("Stockage permanent indisponible"));
+  await fallback.waitForFunction(()=>document.querySelector("#library-storage")?.textContent?.includes("Mode temporaire"));
   await fallback.locator("#library-file").setInputFiles({
     name:"fiche-entrainement.pdf",mimeType:"application/pdf",buffer:Buffer.from("%PDF-1.4\\n%%EOF")
   });
