@@ -47,6 +47,8 @@ try {
    assert(await page.locator("#quiz-feedback").isVisible());
    await page.locator("#next-question").click();
    answered++;
+   // Attendre soit la nouvelle question active, soit le changement de vue : évite une course sur hashchange.
+   await page.waitForSelector("#quiz-options button:not([disabled]), #resultats:not([hidden])");
    if(await page.locator("#resultats").isVisible())break;
   }
   assert(answered>=4&&answered<=10,"Quiz de chapitre");
