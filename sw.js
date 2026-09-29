@@ -1,8 +1,8 @@
 /* Ressources locales uniquement, aucun manuel PDF n'est distribué. */
-const CACHE = "eleclearn-v3-libraryfix-20260930";
+const CACHE = "eleclearn-v4-library-standalone-20260930";
 const ASSETS = [
-  "./","./index.html","./css/style-v2.css","./manifest.webmanifest","./assets/icon.svg",
-  "./js/app-v2.js","./js/questions.js","./js/labs.js","./js/approfondissements.js","./js/illustrations.js","./js/visual-atlas.js","./js/metier-questions.js","./js/exams.js","./js/library.js","./js/zip-reader.js","./js/sql-wasm.js","./js/sql-wasm.wasm",
+  "./","./index.html","./bibliotheque.html","./css/style-v2.css","./css/style-v2.css?v=library-standalone-1","./manifest.webmanifest","./assets/icon.svg",
+  "./js/app-v2.js","./js/app-v2.js?v=library-standalone-1","./js/questions.js","./js/labs.js","./js/approfondissements.js","./js/illustrations.js","./js/illustrations.js?v=library-standalone-1","./js/visual-atlas.js","./js/metier-questions.js","./js/exams.js","./js/library.js","./js/library.js?v=library-standalone-1","./js/zip-reader.js","./js/zip-reader.js?v=library-standalone-1","./js/sql-wasm.js","./js/sql-wasm.wasm",
   "./db/ElecLearn.db",
   "./contenu/f1.html","./contenu/f2.html","./contenu/f3.html","./contenu/f4.html",
   "./contenu/f5.html","./contenu/f6.html","./contenu/f7.html","./contenu/f8.html",

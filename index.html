@@ -8,7 +8,11 @@
   <title>ElecLearn · Laboratoire d'électrotechnique</title>
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="css/style-v2.css">
+  <link rel="stylesheet" href="css/style-v2.css?v=library-standalone-1">
+  <script>
+    // Compatibilité avec les anciens favoris, y compris avant le chargement du routeur.
+    if (location.hash === "#/bibliotheque") location.replace("bibliotheque.html");
+  </script>
   <script>
     window.MathJax = {tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};
   </script>
@@ -17,13 +21,13 @@
   <script defer src="js/questions.js"></script>
   <script defer src="js/labs.js"></script>
   <script defer src="js/approfondissements.js"></script>
-  <script defer src="js/illustrations.js"></script>
+  <script defer src="js/illustrations.js?v=library-standalone-1"></script>
   <script defer src="js/visual-atlas.js"></script>
   <script defer src="js/metier-questions.js"></script>
   <script defer src="js/exams.js"></script>
-  <script defer src="js/zip-reader.js"></script>
-  <script defer src="js/library.js"></script>
-  <script defer src="js/app-v2.js"></script>
+  <script defer src="js/zip-reader.js?v=library-standalone-1"></script>
+  <script defer src="js/library.js?v=library-standalone-1"></script>
+  <script defer src="js/app-v2.js?v=library-standalone-1"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Aller au contenu</a>
@@ -38,7 +42,7 @@
         <a href="#/cours" data-nav="cours">Cours</a>
         <a href="#/quiz" data-nav="quiz">Révisions</a>
         <a href="#/progression" data-nav="progression">Progression</a>
-        <a href="#/bibliotheque" data-nav="bibliotheque">Bibliothèque</a>
+        <a href="bibliotheque.html" data-nav="bibliotheque">Bibliothèque</a>
       </nav>
       <span class="header-status" id="network-status" role="status">Cours disponibles</span>
     </header>

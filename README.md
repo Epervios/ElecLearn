@@ -125,3 +125,9 @@ La branche reste une PR en brouillon ; les changements ne sont pas automatiqueme
 GitHub affiche le **code** du dépôt, pas une application web exécutable. Si GitHub Pages n'a pas été activé pour ce dépôt, une URL GitHub n'ouvre pas la bibliothèque. Lancement local depuis la racine du dépôt : `python -m http.server 8000`, puis `http://localhost:8000/#/bibliotheque` dans le navigateur. Pour l'accès public, activer **Settings → Pages** et choisir une source de publication (branche ou GitHub Actions) avant d'annoncer un lien de démonstration.
 
 Sur la page Bibliothèque : sept matières s'affichent sans PDF importé. Le bouton « Importer PDF ou ZIP » ajoute des documents **privés au navigateur courant**, pas au dépôt GitHub. Le bouton « Vérifier ma bibliothèque » renseigne la disponibilité du stockage ; si celui-ci est refusé ou saturé, la bibliothèque continue de fonctionner temporairement, sans persistance.
+
+## Correctif de navigation : bibliothèque autonome
+
+La **Bibliothèque** s'ouvre désormais via `bibliotheque.html`, une véritable page indépendante de l'ancien routeur de la page d'accueil. L'ancien favori `index.html#/bibliotheque` est redirigé vers cette page. Cette séparation évite qu'un script d'ancienne version ne réachemine la rubrique vers l'accueil et permet une bibliothèque sans chargement du module principal de quiz. Les sept matières et tous leurs liens vers les cours sont disponibles directement depuis cette page.
+
+Lors du déploiement, transférer **tous les fichiers** du dépôt, y compris `bibliotheque.html`, les scripts et `sw.js` ; il ne suffit pas de remplacer `index.html`. Les ressources critiques portent un numéro de version pour éviter que l'ancien service worker réutilise indéfiniment les anciens scripts. Après la mise à jour, ouvrir directement `bibliotheque.html` depuis le domaine de déploiement.

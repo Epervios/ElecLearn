@@ -89,3 +89,11 @@ console.log('OK — 45 schémas originaux répartis dans les 15 chapitres, catal
 
 assert.match(read('js/library.js'),/Vérifier ma bibliothèque/,"Diagnostic de stockage visible absent");
 assert.match(read('js/library.js'),/localOnly\(err\);return storage\(op,value\)/,"Repli temporaire sur erreur de quota absent");
+
+assert.match(read('index.html'),/href="bibliotheque\.html" data-nav="bibliotheque"/,"La navigation de l'accueil doit ouvrir la page autonome");
+assert.match(read('bibliotheque.html'),/data-page="bibliotheque"/,"La bibliothèque autonome manque");
+assert(!read('bibliotheque.html').includes('src="js/app-v2.js'),"La page autonome doit fonctionner sans le routeur SPA");
+assert.match(read('js/app-v2.js'),/location\.replace\("bibliotheque\.html"\)/,"Ancien favori de bibliothèque sans redirection autonome");
+assert(read('sw.js').includes('./bibliotheque.html'),"Page bibliothèque absente du cache PWA");
+assert(read('sw.js').includes('js/library.js?v=library-standalone-1'),"Script autonome versionné absent du cache PWA");
+console.log('OK — bibliothèque autonome, lien direct, compatibilité des favoris et cache PWA.');

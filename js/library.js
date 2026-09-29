@@ -13,6 +13,12 @@ const themes=[
  ["Machines","Machines électriques","Champ magnétique, moteurs AC/DC et transformateurs.",[7,11,12,13,14],12]
 ];
 const categories=[...themes.map(t=>t[0]),"Examens","Autres"];
+const standalone=document.documentElement.dataset.page==="bibliotheque";
+const chapterTitles=["Notions fondamentales","Grandeurs fondamentales","Résistance électrique et couplages","Énergie, puissance et rendement","Effets calorifiques du courant","Sources chimiques de tension","Magnétisme et électromagnétisme","Électrostatique et condensateurs","Instruments de mesure","Courant alternatif monophasé","Courant alternatif triphasé","Moteurs à courant alternatif","Moteurs à courant continu","Transformateurs","Éclairage"];
+const chapterOf=n=>window.ElecApp?.getChapter(n)||{num:n,title:chapterTitles[n-1]};
+const chapterUrl=n=>(standalone?"index.html":"")+"#/cours/"+n;
+const revisionUrl=topic=>(standalone?"index.html":"")+"#/examens?d="+encodeURIComponent(topic);
+
 let root=null,ready=false,connection=null,temporary=false,memory=new Map(),data=[],query="",topic="all",catalogQuery="",previewUrl=null,inflight=new Map();
 const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n};
 const at=(s)=>root.querySelector(s);
@@ -70,19 +76,19 @@ function closePreview(){
 }
 function renderCatalog(){
  const host=at("#library-catalog");host.replaceChildren();
- const filtered=themes.filter(t=>normal(t.slice(0,3).join(" ")+t[3].map(c=>window.ElecApp?.getChapter(c)?.title||"").join(" ")).includes(normal(catalogQuery).trim()));
+ const filtered=themes.filter(t=>normal(t.slice(0,3).join(" ")+t[3].map(c=>chapterOf(c)?.title||"").join(" ")).includes(normal(catalogQuery).trim()));
  for(const [tag,title,description,chapters,cover] of filtered){
    const card=el("article","catalog-card"),art=el("div","catalog-art"),body=el("div","catalog-body"),links=el("div","catalog-links");
    if(window.ElecIllustrations)window.ElecIllustrations.render(cover,art);
    body.append(el("span","eyebrow",tag),el("h3","",title),el("p","",description));
    for(const chapter of chapters){
-     const entry=window.ElecApp?.getChapter(chapter);
+     const entry=chapterOf(chapter);
      if(!entry)continue;
      const a=el("a","catalog-chapter",String(chapter).padStart(2,"0")+" · "+entry.title);
-     a.href="#/cours/"+chapter;links.append(a);
+     a.href=chapterUrl(chapter);links.append(a);
    }
    const revision=el("a","text-link","Révisions de cette matière →");
-   revision.href="#/examens?d="+encodeURIComponent(tag);
+   revision.href=revisionUrl(tag);
    links.append(revision);body.append(links);card.append(art,body);host.append(card);
  }
  if(!filtered.length)host.append(el("p","empty-message","Aucune matière trouvée."));

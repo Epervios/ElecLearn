@@ -348,7 +348,7 @@
     else if(view==="resultats")renderResults();
     else if(view==="progression")renderProgress();
     else if(view==="glossaire")renderGlossary();
-    else if(view==="bibliotheque"){showView("bibliotheque","bibliotheque");window.ElecLibrary?.mount($("library-host"));}
+    else if(view==="bibliotheque"){location.replace("bibliotheque.html");}
     else if(view==="examens"){showView("examens","bibliotheque");window.ElecExams?.mount($("exam-host"),params.get("d"));}
     else location.hash="#/accueil";
   }

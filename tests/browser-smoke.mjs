@@ -44,10 +44,13 @@ try {
    const box=await page.locator(".top-nav").boundingBox();
    assert(box&&box.y>=height-100,"Navigation basse mobile");
    assert.equal(await page.locator(".top-nav a").count(),5);
-   await page.locator('.top-nav a[href="#/bibliotheque"]').click();
+   await page.locator('.top-nav a[href="bibliotheque.html"]').click();
    await page.waitForSelector("#library-catalog .catalog-card");
+   assert(new URL(page.url()).pathname.endsWith("/bibliotheque.html"),"La bibliothèque est une page autonome");
    assert.equal(await page.locator("#library-catalog .catalog-card").count(),7,"Bibliothèque accessible par le bouton mobile");
-   await page.locator('.top-nav a[href="#/accueil"]').click();
+   assert.equal(await page.locator("#library-catalog .catalog-chapter").count()>0,true,"Liens de cours disponibles sans routeur");
+   assert.equal(await page.evaluate(()=>typeof window.ElecApp),"undefined","La bibliothèque fonctionne sans application principale");
+   await page.locator('.top-nav a[href="index.html#/accueil"]').click();
    await page.waitForSelector("#home-fascicules .fascicule-card");
   }
   await page.locator(".fascicule-card.fet-2").click();
@@ -90,8 +93,9 @@ try {
   await checkOverflow("sommaire FET 3");
 
   // La bibliothèque reste privée : import local simulé et suppression.
-  await page.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
+  await page.goto(url+"bibliotheque.html",{waitUntil:"domcontentloaded"});
   await page.waitForSelector("#library-file");
+  assert(new URL(page.url()).pathname.endsWith("/bibliotheque.html"),"La route autonome ne renvoie pas vers l'accueil");
   await page.locator("#library-diagnostic").click();
   await page.waitForFunction(()=>document.querySelector("#library-status")?.textContent?.includes("opérationnels"));
   assert.equal(await page.locator("#library-catalog .catalog-card").count(),7,"Sept matières communes disponibles immédiatement");
@@ -120,7 +124,7 @@ try {
   await page.locator("#library-file").setInputFiles({name:"Annales.zip",mimeType:"application/zip",buffer:zipFixture()});
   await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
   assert.match(await page.locator("#library-documents").textContent(),/Examens/,"Classement commun des annales ZIP");
-  await page.locator('#library-catalog a[href="#/examens?d=Math%C3%A9matiques"]').click();
+  await page.locator('#library-catalog a[href="index.html#/examens?d=Math%C3%A9matiques"]').click();
   await page.waitForSelector("#exam-setup-form");
   assert.equal(await page.locator("#exam-domain").inputValue(),"Mathématiques","Préselection du domaine depuis le catalogue");
   await page.locator("#exam-setup-form button[type=submit]").click();
@@ -145,6 +149,10 @@ try {
    await page.waitForSelector("#lesson-content .worked-panel");
    assert.match(await page.locator("#lesson-title").textContent(),/Éclairage/);
    await checkOverflow("cours hors connexion");
+   await page.goto(url+"bibliotheque.html",{waitUntil:"domcontentloaded"});
+   await page.waitForSelector("#library-catalog .catalog-card");
+   assert.equal(await page.locator("#library-catalog .catalog-card").count(),7,"Bibliothèque autonome hors connexion");
+   await checkOverflow("bibliothèque hors connexion");
   }
   assert.deepEqual(errors,[],"Erreurs JavaScript inattendues");
   console.log("OK : "+name+" "+width+"×"+height);
@@ -156,7 +164,7 @@ try {
   await restricted.addInitScript(()=>Object.defineProperty(window,"indexedDB",{configurable:true,value:undefined}));
   const fallback=await restricted.newPage();
   await fallback.route("https://cdn.jsdelivr.net/**",r=>r.fulfill({status:200,contentType:"application/javascript",body:""}));
-  await fallback.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
+  await fallback.goto(url+"bibliotheque.html",{waitUntil:"domcontentloaded"});
   await fallback.waitForSelector("#library-catalog .catalog-card");
   assert.equal(await fallback.locator("#library-catalog .catalog-card").count(),7);
   await fallback.waitForFunction(()=>document.querySelector("#library-storage")?.textContent?.includes("Mode temporaire"));
@@ -182,7 +190,7 @@ try {
   });
   const quotaPage=await quotaCtx.newPage();
   await quotaPage.route("https://cdn.jsdelivr.net/**",r=>r.fulfill({status:200,contentType:"application/javascript",body:""}));
-  await quotaPage.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
+  await quotaPage.goto(url+"bibliotheque.html",{waitUntil:"domcontentloaded"});
   await quotaPage.waitForFunction(()=>document.querySelector("#library-storage")?.textContent?.includes("Stockage local actif"));
   await quotaPage.locator("#library-file").setInputFiles([
     {name:"fiche-initiale.pdf",mimeType:"application/pdf",buffer:Buffer.from("%PDF-1.4\n%%EOF")},
@@ -193,5 +201,16 @@ try {
   assert.match(await quotaPage.locator("#library-storage").textContent(),/temporaire/i);
   console.log("OK : quota saturé, le PDF reste consultable dans la session");
   await quotaCtx.close();
+
+// Compatibilité avec un ancien favori SPA : la nouvelle bibliothèque ouvre
+// bien un document HTML indépendant plutôt que de repasser sur l'accueil.
+const direct=await browser.newContext({viewport:{width:375,height:812}});
+const directPage=await direct.newPage();
+await directPage.route("https://cdn.jsdelivr.net/**",r=>r.fulfill({status:200,contentType:"application/javascript",body:""}));
+await directPage.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
+await directPage.waitForURL(u=>u.pathname.endsWith("/bibliotheque.html"));
+await directPage.waitForSelector("#library-catalog .catalog-card");
+assert.equal(await directPage.locator("#library-catalog .catalog-card").count(),7,"L'ancien favori redirige vers le catalogue");
+await direct.close();
 } finally {await browser.close();}
 console.log("Vérification navigateur : "+done+"/"+sizes.length+" formats.");
