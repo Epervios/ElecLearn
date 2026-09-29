@@ -152,6 +152,7 @@
       if(c.num>=7 && window.ElecExtensions && window.ElecExtensions[c.num]){
         $("lesson-content").insertAdjacentHTML("beforeend",window.ElecExtensions[c.num]);
       }
+      if(window.ElecAtlas)window.ElecAtlas.attach(c.num,$("lesson-content"));
       const headings=$("lesson-content").querySelectorAll("h3,h4");
       headings.forEach((h,i)=>{
         h.id="section-"+c.num+"-"+i;
@@ -348,7 +349,7 @@
     else if(view==="progression")renderProgress();
     else if(view==="glossaire")renderGlossary();
     else if(view==="bibliotheque"){showView("bibliotheque","bibliotheque");window.ElecLibrary?.mount($("library-host"));}
-    else if(view==="examens"){showView("examens","bibliotheque");window.ElecExams?.mount($("exam-host"));}
+    else if(view==="examens"){showView("examens","bibliotheque");window.ElecExams?.mount($("exam-host"),params.get("d"));}
     else location.hash="#/accueil";
   }
   function init(){

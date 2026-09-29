@@ -31,10 +31,15 @@
 
 13. Ouvrir chacun des quinze chapitres ; contrôler les illustrations SVG, le titre accessible et la légende en mode ordinateur et téléphone.
 14. Vérifier que les trois cartes de fascicule affichent une miniature vectorielle lisible.
-15. Importer des PDF locaux d'un support de cours et d'une annale 2024 ; contrôler le classement par domaine, année et métier.
+15. Ouvrir la bibliothèque avant tout import : sept matières et leurs liens de cours doivent être visibles. Importer ensuite des PDF et une annale 2024 ; contrôler le classement par domaine et année, sans séparer les professions.
 16. Ouvrir un PDF dans l'aperçu, puis dans un onglet séparé. Fermer l'aperçu et supprimer le document ; aucun fichier ne doit apparaître dans les requêtes sortantes.
 17. Recharger la bibliothèque : les PDF restent présents sur cet appareil. Vérifier l'effet du mode navigation privée et d'un quota insuffisant.
 18. Importer directement une archive ZIP classique contenant des PDF : les fichiers doivent être extraits et classés localement. Si le navigateur ne prend pas en charge la décompression ZIP, vérifier le message de repli et l’import des PDF extraits.
 19. Lancer un entraînement professionnel général et ciblé sur les mathématiques ; contrôler les corrections et la conservation des résultats.
 20. Tester le catalogue sur iPhone Safari, Android Chrome, tablette et bureau : les prévisualisations PDF dépendent des capacités natives de chaque navigateur.
 21. S'assurer que les neuf documents complets et les 44 sujets officiels ne sont jamais copiés dans GitHub Pages, dans le cache du service worker ni dans un artefact CI.
+
+22. Vérifier les 45 schémas SVG : trois dans chaque chapitre, contextualisés au niveau des sections.
+23. Vérifier la recherche dans le catalogue intégré et la préselection du domaine d’examen.
+24. Bloquer IndexedDB dans un navigateur de test : le catalogue reste accessible et l’import temporaire affiche son avertissement.
+25. Sur un ZIP contenant deux fichiers homonymes dans deux sous-dossiers différents, contrôler l'absence d'écrasement.

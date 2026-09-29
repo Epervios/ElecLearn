@@ -54,7 +54,9 @@ async function extract(file){
     const signature=await blob.slice(0,5).text();
     if(signature!=="%PDF-")throw Error("Un fichier de l'archive n'est pas un PDF valide.");
     total+=uncompressed;
-    pdfs.push(new File([blob],base,{type:"application/pdf",lastModified:file.lastModified}));
+    const pdf=new File([blob],base,{type:"application/pdf",lastModified:file.lastModified});
+    Object.defineProperty(pdf,"_archivePath",{value:file.name+"/"+fullName});
+    pdfs.push(pdf);
   }
   if(!pdfs.length)throw Error("Aucun PDF dans cette archive.");
   return pdfs;

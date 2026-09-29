@@ -1,180 +1,178 @@
-/* Bibliothèque PRIVÉE : les fichiers importés sont stockés dans IndexedDB
-   sur l'appareil de l'utilisateur, jamais inclus dans le dépôt ou transmis. */
+/* ElecLearn : bibliothèque immédiatement utilisable + PDF privés en stockage local.
+   Les supports importés restent sur cet appareil ; aucun contenu tiers n'est publié. */
 (function(){
- "use strict";
- const DATABASE="eleclearn-private-documents", STORE="documents", VERSION=1;
- const groups=[
-   {tag:"Installation",title:"Matériaux et techniques",description:"Métaux, isolants, câbles, dispositifs de protection et appareillage."},
-   {tag:"Énergie",title:"Production et distribution",description:"Production d'énergie, transport, transformation et installations électriques."},
-   {tag:"Réglementation",title:"Contrôles OIBT et NIBT 2025",description:"Principes, vérifications et recherche dans les prescriptions en vigueur."},
-   {tag:"Réseaux",title:"Télécommunication et télématique",description:"Transmission cuivre, fibre optique, systèmes numériques et réseaux."},
-   {tag:"Dessin",title:"Dessins professionnels I et II",description:"Schémas de principe, circuits de commande, plans de raccordement et de force."},
-   {tag:"Mathématiques",title:"Mathématiques techniques",description:"Unités, puissances de dix, trigonométrie, vecteurs et calculs électriques."},
-   {tag:"Examens",title:"Annales de formation CFC",description:"Épreuves historiques : distinguez électricien de montage et planificateur-électricien."}
- ];
- const $=(root,s)=>root.querySelector(s);
- const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
- let dbPromise=null,root=null,initialised=false,search="",category="all",objectUrl=null,loaded=[];
- function openDB(){
-   if(!("indexedDB" in window))return Promise.reject(Error("IndexedDB indisponible dans ce navigateur."));
-   if(dbPromise)return dbPromise;
-   dbPromise=new Promise((resolve,reject)=>{
-     const req=indexedDB.open(DATABASE,VERSION);
-     req.onupgradeneeded=()=>{
-       const db=req.result;
-       if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE,{keyPath:"key"});
-     };
-     req.onsuccess=()=>resolve(req.result);
-     req.onerror=()=>reject(req.error||Error("Ouverture de la bibliothèque impossible."));
-   }).catch(e=>{dbPromise=null;throw e;});
-   return dbPromise;
- }
- async function tx(mode,action){
-   const db=await openDB();
-   return new Promise((resolve,reject)=>{
-     const transaction=db.transaction(STORE,mode),store=transaction.objectStore(STORE);
-     let output,request;
-     try{request=action(store);}catch(e){reject(e);return;}
-     if(request){request.onsuccess=()=>{output=request.result};request.onerror=()=>reject(request.error);}
-     transaction.oncomplete=()=>resolve(output);
-     transaction.onerror=()=>reject(transaction.error);
-     transaction.onabort=()=>reject(transaction.error||Error("Opération annulée."));
+"use strict";
+const DB="eleclearn-private-documents",STORE="documents";
+const themes=[
+ ["Installation","Installations et matériaux","Conducteurs, résistances, échauffement et mesures.",[1,3,5,9],3],
+ ["Énergie","Production et énergie","Puissance, rendement, transport et transformation.",[4,10,11,14],14],
+ ["Réglementation","Sécurité et contrôles","Principes de sécurité et instruments. Vérifiez les exigences dans les textes officiels en vigueur.",[1,5,9,11],9],
+ ["Réseaux","Signaux et télématique","Fondements électriques utiles aux signaux et télécommunications.",[7,8,10],10],
+ ["Dessin","Dessin et schémas électriques","Circuits, couplages, mesure et machines.",[2,3,9,11,12],11],
+ ["Mathématiques","Mathématiques techniques","Loi d'Ohm, puissance, alternatif et calcul triphasé.",[2,3,4,10,11],2],
+ ["Machines","Machines électriques","Champ magnétique, moteurs AC/DC et transformateurs.",[7,11,12,13,14],12]
+];
+const categories=[...themes.map(t=>t[0]),"Examens","Autres"];
+let root=null,ready=false,connection=null,temporary=false,memory=new Map(),data=[],query="",topic="all",catalogQuery="",previewUrl=null;
+const el=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n};
+const at=(s)=>root.querySelector(s);
+const normal=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const status=(msg,bad=false)=>{const n=at("#library-status");if(n){n.textContent=msg;n.classList.toggle("library-error",bad)}};
+function classify(name){
+ if(/(?:^|[ /_])20\d{2}[-_ /]|_(ELM|PELE)_|(?:examen|annale|epreuve|épreuve)/i.test(name))return "Examens";
+ if(/nibt|oibt/i.test(name))return "Réglementation";
+ if(/sch[eé]ma|dessin/i.test(name))return "Dessin";
+ if(/t[eé]l[eé]m|t[eé]l[eé]com|r[eé]seau/i.test(name))return "Réseaux";
+ if(/math/i.test(name))return "Mathématiques";
+ if(/moteur|machine/i.test(name))return "Machines";
+ if(/production|transpor|[eé]nergie/i.test(name))return "Énergie";
+ if(/mat[eé]r|c[aâ]ble|isolant|install/i.test(name))return "Installation";
+ return "Autres";
+}
+function localOnly(error){
+ temporary=true;const box=at("#library-storage");
+ if(box)box.textContent="Stockage permanent indisponible. Les documents importés resteront accessibles uniquement jusqu'à la fermeture de cet onglet. "+(error?.message||"");
+}
+function openDatabase(){
+ if(connection)return connection;
+ connection=new Promise((resolve,reject)=>{
+   if(!("indexedDB" in window)){reject(Error("IndexedDB non disponible"));return}
+   const request=indexedDB.open(DB,1);
+   request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains(STORE))request.result.createObjectStore(STORE,{keyPath:"key"})};
+   request.onsuccess=()=>resolve(request.result);
+   request.onerror=()=>reject(request.error||Error("Stockage local non autorisé"));
+   request.onblocked=()=>reject(Error("Une autre fenêtre bloque l'accès au stockage. Fermez-la puis réessayez."));
+ }).catch(err=>{connection=null;throw err});
+ return connection;
+}
+async function storage(op,value){
+ if(temporary){if(op==="all")return [...memory.values()];if(op==="put")memory.set(value.key,value);if(op==="delete")memory.delete(value);return}
+ try{
+   const db=await openDatabase();
+   return await new Promise((resolve,reject)=>{
+     const tx=db.transaction(STORE,op==="all"?"readonly":"readwrite");
+     const store=tx.objectStore(STORE);
+     const req=op==="all"?store.getAll():op==="put"?store.put(value):store.delete(value);
+     let answer;req.onsuccess=()=>answer=req.result;
+     req.onerror=()=>reject(req.error);tx.onerror=()=>reject(tx.error);
+     tx.oncomplete=()=>resolve(answer);
    });
+ }catch(err){
+   if(err?.name==="QuotaExceededError")throw err;
+   localOnly(err);return storage(op,value);
  }
- function classify(name){
-   if(/(?:^|[\/_ ])(20\d{2}|2015.zero)[_ -]|_(ELM|PELE)_donnee\.pdf/i.test(name))return "Examens";
-   if(/nibt|oibt/i.test(name))return "Réglementation";
-   if(/dessin|schéma|schema/i.test(name))return "Dessin";
-   if(/télécom|telecom|télémat|telemat/i.test(name))return "Réseaux";
-   if(/math/i.test(name))return "Mathématiques";
-   if(/production/i.test(name))return "Énergie";
-   if(/mater|matér|câble|cable/i.test(name))return "Installation";
-   return "Autres";
- }
- function profession(name){
-   if(/_PELE_/i.test(name))return "Planificateur-électricien CFC";
-   if(/_ELM_/i.test(name))return "Électricien de montage CFC";
-   return "";
- }
- function setStatus(message,isError=false){
-   const node=$(root,"#library-status");node.textContent=message;node.classList.toggle("library-error",!!isError);
- }
- function bytes(n){if(n>=1024*1024)return (n/1048576).toLocaleString("fr-CH",{maximumFractionDigits:1})+" Mo";return Math.round(n/1024)+" Ko";}
- function id(file){return file.name+"::"+file.size+"::"+file.lastModified;}
- async function list(){loaded=await tx("readonly",store=>store.getAll());draw();}
- async function importFiles(files){
-   const selection=Array.from(files||[]);
-   if(!selection.length)return;
-   const pdfs=selection.filter(f=>f.type==="application/pdf"||/\.pdf$/i.test(f.name));
-   const archives=selection.filter(f=>/\.zip$/i.test(f.name)||f.type==="application/zip");
-   const errors=[];
-   for(const archive of archives){
-     setStatus("Décompression de "+archive.name+" sur cet appareil…");
-     try{
-       const extracted=await window.ElecZip.extract(archive);
-       pdfs.push(...extracted);
-     }catch(e){errors.push(archive.name+" : "+(e?.message||e));}
+}
+function closePreview(){
+ const pane=at("#library-preview");
+ if(pane){pane.hidden=true;pane.querySelector("iframe").removeAttribute("src")}
+ if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}
+}
+function renderCatalog(){
+ const host=at("#library-catalog");host.replaceChildren();
+ const filtered=themes.filter(t=>normal(t.slice(0,3).join(" ")+t[3].map(c=>window.ElecApp?.getChapter(c)?.title||"").join(" ")).includes(normal(catalogQuery).trim()));
+ for(const [tag,title,description,chapters,cover] of filtered){
+   const card=el("article","catalog-card"),art=el("div","catalog-art"),body=el("div","catalog-body"),links=el("div","catalog-links");
+   if(window.ElecIllustrations)window.ElecIllustrations.render(cover,art);
+   body.append(el("span","eyebrow",tag),el("h3","",title),el("p","",description));
+   for(const chapter of chapters){
+     const entry=window.ElecApp?.getChapter(chapter);
+     if(!entry)continue;
+     const a=el("a","catalog-chapter",String(chapter).padStart(2,"0")+" · "+entry.title);
+     a.href="#/cours/"+chapter;links.append(a);
    }
-   if(!pdfs.length){
-     setStatus(errors.length?errors.join(" · "):"Sélectionnez des PDF ou une archive ZIP contenant des PDF.",true);
-     return;
-   }
-   let imported=0;
-   for(const file of pdfs){
-     setStatus("Importation privée "+(imported+errors.length+1)+"/"+pdfs.length+" : "+file.name);
-     try{
-       await tx("readwrite",store=>store.put({
-         key:id(file),name:file.name,size:file.size,changed:file.lastModified,
-         group:classify(file.name),profession:profession(file.name),
-         year:((file.name.match(/20\d{2}/)||[])[0]||""),imported:Date.now(),
-         blob:file
-       }));
-       imported++;
-     }catch(e){
-       errors.push(file.name+" : "+(e?.name==="QuotaExceededError"?"espace de stockage insuffisant":e?.message||e));
-     }
-   }
-   $(root,"#library-file").value="";
-   if(errors.length)setStatus(imported+" PDF importés, "+errors.length+" en échec. "+errors[0]+". Pour les gros fichiers, utilisez un espace de stockage local suffisant.",true);
-   else setStatus(imported+" PDF importés sur cet appareil. Aucun document n'a été envoyé à un serveur.");
-   await list();
+   const revision=el("a","text-link","Révisions de cette matière →");
+   revision.href="#/examens?d="+encodeURIComponent(tag);
+   links.append(revision);body.append(links);card.append(art,body);host.append(card);
  }
- function closePreview(){
-   const frame=$(root,"#library-preview");if(frame){frame.hidden=true;frame.querySelector("iframe").removeAttribute("src");}
-   if(objectUrl){URL.revokeObjectURL(objectUrl);objectUrl=null;}
+ if(!filtered.length)host.append(el("p","empty-message","Aucune matière trouvée."));
+}
+function renderDocs(){
+ const host=at("#library-documents");host.replaceChildren();
+ const results=data.filter(d=>(topic==="all"||topic===d.group)&&normal(d.name+" "+d.group+" "+d.year).includes(normal(query))).sort((a,b)=>b.year.localeCompare(a.year)||a.name.localeCompare(b.name,"fr"));
+ at("#library-count").textContent=data.length+" PDF privé"+(data.length===1?"":"s")+" · "+results.length+" affiché"+(results.length===1?"":"s");
+ if(!results.length){host.append(el("p","empty-message",data.length?"Aucun document trouvé pour ce filtre.":"Aucun PDF personnel importé. Les cours illustrés et exercices du haut de cette page sont déjà accessibles."));return}
+ for(const d of results){
+   const card=el("div","document-card"),info=el("div","document-info"),controls=el("div","document-actions");
+   info.append(el("span","tag",d.group),el("strong","",d.name),
+       el("small","",(d.year?d.year+" · ":"")+(d.blob.size/1048576).toLocaleString("fr-CH",{maximumFractionDigits:1})+" Mo"));
+   const view=el("button","btn btn-secondary","Afficher PDF"),remove=el("button","btn btn-quiet","Retirer");
+   view.type=remove.type="button";
+   view.addEventListener("click",()=>{
+     closePreview();previewUrl=URL.createObjectURL(d.blob);
+     const pane=at("#library-preview");pane.hidden=false;
+     pane.querySelector("h3").textContent=d.name;
+     pane.querySelector("iframe").src=previewUrl;
+     pane.querySelector("a").href=previewUrl;
+     pane.scrollIntoView({behavior:"smooth",block:"start"});
+   });
+   remove.addEventListener("click",async()=>{
+     if(!confirm("Retirer ce PDF de votre bibliothèque locale ?"))return;
+     closePreview();
+     try{await storage("delete",d.key);status("Document retiré.");await refresh();}
+     catch(err){status("Suppression impossible : "+err.message,true)}
+   });
+   controls.append(view,remove);card.append(info,controls);host.append(card);
  }
- function draw(){
-   const host=$(root,"#library-documents");host.replaceChildren();
-   const records=loaded.filter(d=>(category==="all"||d.group===category) &&
-       (d.name+" "+d.year+" "+d.profession+" "+d.group).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().includes(search.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase()))
-     .sort((a,b)=>(a.group===b.group?0:a.group.localeCompare(b.group,"fr"))||b.year.localeCompare(a.year)||a.name.localeCompare(b.name,"fr"));
-   $(root,"#library-count").textContent=loaded.length+" document"+(loaded.length===1?"":"s")+" privé"+(loaded.length===1?"":"s")+" · "+records.length+" affiché"+(records.length===1?"":"s");
-   if(!records.length){
-     host.append(el("p","empty-message",loaded.length?"Aucun document pour ce filtre.":"Bibliothèque vide. Importez vos PDF pour les consulter directement sur cet appareil."));
-     return;
-   }
-   for(const d of records){
-     const row=el("div","document-card"),info=el("div","document-info");
-     const badge=el("span","tag",d.group),title=el("strong","",d.name);
-     const meta=el("small","",(d.profession?d.profession+" · ":"")+(d.year?d.year+" · ":"")+bytes(d.size));
-     info.append(badge,title,meta);
-     const controls=el("div","document-actions");
-     const open=el("button","btn btn-secondary","Ouvrir");open.type="button";open.addEventListener("click",()=>{
-       closePreview();
-       objectUrl=URL.createObjectURL(d.blob);
-       const preview=$(root,"#library-preview");preview.hidden=false;
-       preview.querySelector("h3").textContent=d.name;
-       preview.querySelector("iframe").src=objectUrl+"#toolbar=1";
-       const nativeLink=preview.querySelector("a");nativeLink.href=objectUrl;
-       preview.scrollIntoView({block:"start",behavior:"smooth"});
-     });
-     const remove=el("button","btn btn-quiet","Retirer");remove.type="button";remove.setAttribute("aria-label","Retirer "+d.name);
-     remove.addEventListener("click",async()=>{
-       if(!confirm("Retirer ce PDF de la bibliothèque privée de cet appareil ?"))return;
-       closePreview();
-       try{await tx("readwrite",store=>store.delete(d.key));setStatus("Document retiré de cet appareil.");await list();}
-       catch(e){setStatus("Suppression impossible : "+e.message,true);}
-     });
-     controls.append(open,remove);row.append(info,controls);host.append(row);
-   }
+}
+async function refresh(){data=await storage("all");renderDocs()}
+async function importFiles(files){
+ const incoming=[...files||[]],items=incoming.filter(f=>/\.pdf$/i.test(f.name)||f.type==="application/pdf"),zips=incoming.filter(f=>/\.zip$/i.test(f.name)||f.type==="application/zip");
+ let imported=0,failures=[];
+ for(const file of zips){
+   status("Extraction locale : "+file.name);
+   try{
+     if(!window.ElecZip)throw Error("Décompresseur non chargé");
+     items.push(...await window.ElecZip.extract(file));
+   }catch(err){failures.push(file.name+" : "+err.message)}
  }
- function mount(node){
-   root=node;
-   if(initialised){list().catch(e=>setStatus(e.message,true));return;}
-   initialised=true;
-   const grid=el("div","library-topics");
-   for(const topic of groups){
-     const card=el("div","library-topic");
-     card.append(el("span","eyebrow",topic.tag),el("h3","",topic.title),el("p","",topic.description));
-     grid.append(card);
-   }
-   const heading=el("div","library-feature-head");
-   heading.innerHTML='<div><p class="eyebrow">IMPORT LOCAL</p><h2>Vos documents sur cet appareil</h2><p>Choisissez les PDF à importer. Aucun fichier n’est envoyé au site ni ajouté à GitHub. Les données restent dans le stockage local de votre navigateur.</p></div>';
-   const importBox=el("div","panel library-upload");
-   importBox.innerHTML='<label class="btn btn-primary" for="library-file">PDF ou archive ZIP</label><input class="sr-only" id="library-file" type="file" accept=".pdf,.zip,application/pdf,application/zip" multiple>'+
-     '<p>Sélectionnez plusieurs PDF ou importez directement une archive ZIP contenant des PDF. Le traitement reste sur cet appareil ; si votre navigateur ne peut pas décompresser le ZIP, extrayez les PDF avant l’importation.</p>'+
-     '<p class="list-caption" id="library-status" role="status" aria-live="polite">Aucun document ne sera publié automatiquement.</p>';
-   const filters=el("div","toolbar library-toolbar");
-   filters.innerHTML='<label class="search-field"><span class="sr-only">Rechercher un document</span><input id="library-search" type="search" placeholder="Titre, année ou profession…"></label>'+
-      '<label class="sr-only" for="library-group">Domaine</label><select id="library-group" aria-label="Filtrer les documents"><option value="all">Tous les domaines</option>'+
-      [...groups.map(g=>g.tag),"Autres"].map(g=>'<option value="'+g+'">'+g+'</option>').join("")+'</select>';
-   const preview=el("section","panel library-preview");preview.id="library-preview";preview.hidden=true;
-   preview.innerHTML='<div class="library-preview-head"><h3></h3><div><a class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Ouvrir en plein écran ↗</a> <button type="button" class="btn btn-quiet" id="library-close">Fermer</button></div></div><iframe title="Aperçu du document personnel" loading="lazy"></iframe>';
-   node.append(
-      el("h2","library-heading","Domaines de révision"),grid,
-      heading,importBox,filters,el("p","list-caption","") ,preview
-   );
-   node.querySelector(".list-caption:not(#library-status)").id="library-count";
-   node.append(el("div","library-documents"));node.querySelector(".library-documents").id="library-documents";
-   const file=$(node,"#library-file");
-   file.addEventListener("change",()=>importFiles(file.files));
-   importBox.addEventListener("dragover",e=>{e.preventDefault();importBox.classList.add("library-drag")});
-   importBox.addEventListener("dragleave",()=>importBox.classList.remove("library-drag"));
-   importBox.addEventListener("drop",e=>{e.preventDefault();importBox.classList.remove("library-drag");importFiles(e.dataTransfer?.files)});
-   $(node,"#library-group").addEventListener("change",e=>{category=e.target.value;draw()});
-   $(node,"#library-search").addEventListener("input",e=>{search=e.target.value;draw()});
-   $(node,"#library-close").addEventListener("click",closePreview);
-   list().catch(e=>setStatus("Stockage local indisponible : "+e.message,true));
+ for(const file of items){
+   status("Import local "+(imported+1)+"/"+items.length+" : "+file.name);
+   try{
+     const signature=await file.slice(0,5).text();
+     if(signature!=="%PDF-")throw Error("En-tête PDF invalide");
+     const key=(file._archivePath||file.name)+"::"+file.size+"::"+file.lastModified;
+     await storage("put",{key,name:file.name,blob:file,group:classify(file.name),year:(file.name.match(/20\d{2}/)||[])[0]||"",imported:Date.now()});
+     imported++;
+   }catch(err){failures.push(file.name+" : "+(err.name==="QuotaExceededError"?"espace insuffisant":err.message))}
  }
- window.ElecLibrary={mount,classification:classify,domains:groups.map(x=>x.tag)};
+ at("#library-file").value="";
+ await refresh();
+ if(failures.length)status(imported+" PDF importés ; "+failures.length+" échec(s). "+failures.slice(0,2).join(" · "),true);
+ else status(imported+" PDF importés. Tous les documents restent sur votre appareil.");
+}
+function mount(node){
+ root=node;
+ if(ready){refresh().catch(err=>status(err.message,true));return}
+ ready=true;
+ const intro=el("div","library-feature-head");
+ intro.append(el("span","eyebrow","COURS DISPONIBLES SANS IMPORT"),el("h2","","Un seul programme, toutes professions"),
+   el("p","","Accédez directement aux notions communes : cours, schémas et exercices. Les supports PDF personnels sont facultatifs."));
+ const filter=el("label","search-field catalog-search"),searchInput=el("input");searchInput.type="search";
+ filter.append(el("span","sr-only","Rechercher une matière"),searchInput);
+ searchInput.placeholder="Rechercher une matière ou une notion…";searchInput.value=catalogQuery;
+ const catalog=el("div","library-catalog");catalog.id="library-catalog";
+ node.append(intro,filter,catalog);
+ const section=el("div","library-feature-head");
+ section.append(el("span","eyebrow","SUPPORTS PERSONNELS"),el("h2","","Ajouter des documents à votre bibliothèque"),
+     el("p","","Importez vos PDF ou une archive ZIP pour les consulter localement. Aucun document n'est envoyé au serveur."));
+ const upload=el("div","panel library-upload");
+ upload.innerHTML='<label class="btn btn-primary" for="library-file">Importer PDF ou ZIP</label><input class="sr-only" type="file" id="library-file" accept=".pdf,.zip,application/pdf,application/zip" multiple><p>Sélection multiple ou glisser-déposer ; les annales des différentes professions sont regroupées par matière.</p><p id="library-status" class="list-caption" role="status" aria-live="polite">Prêt à importer.</p><p id="library-storage" class="list-caption"></p>';
+ const toolbar=el("div","toolbar library-toolbar");
+ toolbar.innerHTML='<label class="search-field"><span class="sr-only">Recherche dans les documents</span><input id="library-search" type="search" placeholder="Nom, année, matière…"></label><label class="sr-only" for="library-group">Filtrer les documents par matière</label><select id="library-group"><option value="all">Toutes les matières</option>'+categories.map(c=>'<option value="'+c+'">'+c+'</option>').join("")+'</select>';
+ const count=el("p","list-caption");count.id="library-count";
+ const preview=el("section","panel library-preview");preview.id="library-preview";preview.hidden=true;
+ preview.innerHTML='<div class="library-preview-head"><h3></h3><div><a class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Ouvrir en plein écran ↗</a><button type="button" class="btn btn-quiet" id="library-close">Fermer</button></div></div><iframe title="Aperçu de votre PDF" loading="lazy"></iframe>';
+ const docs=el("div","library-documents");docs.id="library-documents";
+ node.append(section,upload,toolbar,count,preview,docs);
+ searchInput.addEventListener("input",e=>{catalogQuery=e.target.value;renderCatalog()});
+ at("#library-search").addEventListener("input",e=>{query=e.target.value;renderDocs()});
+ at("#library-group").addEventListener("change",e=>{topic=e.target.value;renderDocs()});
+ at("#library-file").addEventListener("change",e=>importFiles(e.target.files).catch(err=>status(err.message,true)));
+ upload.addEventListener("dragover",e=>{e.preventDefault();upload.classList.add("library-drag")});
+ upload.addEventListener("dragleave",()=>upload.classList.remove("library-drag"));
+ upload.addEventListener("drop",e=>{e.preventDefault();upload.classList.remove("library-drag");importFiles(e.dataTransfer?.files).catch(err=>status(err.message,true))});
+ at("#library-close").addEventListener("click",closePreview);
+ renderCatalog();refresh().catch(err=>status(err.message,true));
+}
+window.ElecLibrary={mount,classification:classify,subjects:themes.map(t=>t[0]),get temporary(){return temporary}};
 })();

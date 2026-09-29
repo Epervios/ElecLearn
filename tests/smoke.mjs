@@ -25,7 +25,7 @@ const app = read('js/app-v2.js');
 for (const marker of ['localStorage','hashchange','questionsForChapter','renderLesson','serviceWorker','renderGlossary'])
   assert(app.includes(marker), 'Fonctionnalité absente : '+marker);
 const html = read('index.html');
-for (const path of ['css/style-v2.css','js/questions.js','js/labs.js','js/approfondissements.js','js/illustrations.js','js/metier-questions.js','js/exams.js','js/library.js','js/zip-reader.js','js/zip-reader.js','js/app-v2.js','manifest.webmanifest']) {
+for (const path of ['css/style-v2.css','js/questions.js','js/labs.js','js/approfondissements.js','js/illustrations.js','js/visual-atlas.js','js/metier-questions.js','js/exams.js','js/library.js','js/zip-reader.js','js/app-v2.js','manifest.webmanifest']) {
   assert(html.includes(path), 'Ressource non référencée : '+path);
   assert(fs.existsSync(file(path)), 'Ressource absente : '+path);
 }
@@ -58,7 +58,7 @@ for(const q of metier.window.ElecExamQuestions){
  assert(q.o.length===4&&q.a>=0&&q.a<4,"Réponses professionnelles invalides");
  assert.equal(new Set(q.o).size,4,"Options redondantes");
 }
-for(const path of ['js/illustrations.js','js/metier-questions.js','js/exams.js','js/library.js']){
+for(const path of ['js/illustrations.js','js/visual-atlas.js','js/metier-questions.js','js/exams.js','js/library.js']){
  assert(read('index.html').includes(path),"Ressource non chargée : "+path);
  assert(read('sw.js').includes(path),"Ressource non disponible hors connexion : "+path);
 }
@@ -70,3 +70,19 @@ console.log("OK — 15 illustrations vectorielles, 28 questions inédites, bibli
 
 assert(read("js/zip-reader.js").includes("DecompressionStream"),"Décompression ZIP locale absente");
 console.log("OK — importation locale des archives ZIP activée.");
+
+
+const atlas={window:{}};
+vm.runInNewContext(read("js/visual-atlas.js"),atlas);
+assert.equal(atlas.window.ElecAtlas.figureCount,30,"Trente illustrations par section");
+for(let i=1;i<=15;i++){
+ const rows=atlas.window.ElecAtlas.data[i];
+ assert.equal(rows.length,2,"Deux compléments attendus au chapitre "+i);
+ const headings=[...read('contenu/f'+i+'.html').matchAll(/<h[34](?:\s[^>]*)?>([\s\S]*?)<\/h[34]>/gi)]
+  .map(m=>m[1].replace(/<[^>]*>/g,"").trim());
+ for(const r of rows)assert(headings.some(h=>h.startsWith(r[0]+" ")||h===r[0]),"Ancrage introuvable "+i+"/"+r[0]);
+}
+assert(read('js/library.js').includes('Parcours commun')===false,"Vérification sans texte fragile");
+assert(read('js/library.js').includes('Un seul programme, toutes professions'),"Catalogue pédagogique unifié non chargé");
+assert(read('js/library.js').includes('catalog-chapter'),"Accès direct aux cours absent");
+console.log('OK — 45 schémas originaux répartis dans les 15 chapitres, catalogue unifié.');

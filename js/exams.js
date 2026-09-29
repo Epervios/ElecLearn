@@ -8,13 +8,13 @@
  const shuffle=arr=>{const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a;};
  function getHistory(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return []}}
  function save(result){try{localStorage.setItem(KEY,JSON.stringify([result,...getHistory()].slice(0,30)))}catch(e){console.warn("Historique d'examens non enregistré",e)}}
- function mount(node){
+ function mount(node,initialDomain){
    root=node;
-   if(root.dataset.examReady==="yes")return;
+   if(root.dataset.examReady==="yes"){if(initialDomain)showSetup(initialDomain);return;}
    root.dataset.examReady="yes";
-   showSetup();
+   showSetup(initialDomain);
  }
- function showSetup(){
+ function showSetup(initialDomain){
    session=null;root.replaceChildren();
    const card=el("form","panel exam-setup");card.id="exam-setup-form";
    const title=el("h2","","Préparer une séance"),desc=el("p","","Choisissez un domaine et entraînez-vous sur des questions inédites. Les annales originales restent uniquement dans votre bibliothèque privée.");
@@ -23,6 +23,7 @@
    for(const d of ["Tout le programme professionnel",...new Set(questions.map(q=>q.domain))]){
      const opt=el("option","",d);opt.value=d==="Tout le programme professionnel"?"all":d;select.append(opt);
    }
+   if(initialDomain && [...select.options].some(o=>o.value===initialDomain))select.value=initialDomain;
    const nlabel=el("label","","Durée de la séance");nlabel.htmlFor="exam-length";
    const length=el("select");length.id="exam-length";
    for(const n of [5,10,20,28]){

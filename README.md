@@ -108,3 +108,14 @@ Les neuf supports fournis pour la préparation couvrent les matériaux, la produ
 ## Droits des supports de référence
 
 Plusieurs ouvrages de formation mentionnent explicitement une interdiction de reproduction, même partielle, sans autorisation écrite. Leur importation personnelle dans une session locale est distincte de leur publication sur le dépôt public. Les références fournies servent de trame thématique, mais aucun contenu des ouvrages, annales ou corrigés n'est ajouté tel quel au code public. Si des droits de diffusion sont obtenus, établir la provenance, la licence, la durée de mise à disposition et les obligations d'attribution avant toute nouvelle publication.
+
+
+## Mise à jour V2.1 — catalogue commun et atlas visuel
+
+La bibliothèque n'est plus une page vide tant que les PDF ne sont pas importés : sept matières sont accessibles immédiatement, avec des liens vers les quinze chapitres, des miniatures vectorielles et des révisions ciblées. Les cours sont **communs aux professions** : installation, énergie, sécurité, télématique, dessin, mathématiques et machines. Les archives restent classées dans « Examens », sans séparation par métier ni filtre par profession.
+
+L’atlas visuel a été renforcé : **45 schémas SVG originaux au total**, répartis sur 15 chapitres (une illustration principale et deux illustrations contextuelles insérées au niveau des sections). Sept aperçus thématiques figurent aussi dans la bibliothèque ; ces aperçus réutilisent certaines illustrations des cours. Les 8 laboratoires interactifs sont conservés.
+
+La bibliothèque privée est désormais facultative : elle ajoute vos PDF/ZIP à des cours déjà utilisables. L'import fait apparaître un état de progression et des erreurs explicites. Si le stockage persistant du navigateur est bloqué, un mode temporaire permet de consulter les documents pendant la session, avec un avertissement. Deux PDF portant le même nom dans des sous-dossiers ZIP différents sont conservés distinctement grâce à leur chemin d'origine.
+
+La branche reste une PR en brouillon ; les changements ne sont pas automatiquement visibles sur le site publié tant qu'ils ne sont pas déployés.

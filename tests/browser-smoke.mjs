@@ -52,7 +52,8 @@ try {
   await page.locator("#course-list .chapter-card").first().click();
   await page.waitForSelector("#lesson-content .worked-panel");
   assert.equal(await page.locator("#lab-container:not([hidden])").count(),1);
-  assert.equal(await page.locator("#lesson-content .concept-figure svg").count(),1,"Illustration du chapitre visible");
+  assert.equal(await page.locator("#lesson-content .concept-figure svg").count(),1,"Illustration principale visible");
+  assert.equal(await page.locator("#lesson-content .atlas-card svg").count(),2,"Deux illustrations complémentaires par leçon");
   await checkOverflow("leçon FET 2");
   const before=await page.locator("#lab-container .lab-control output").first().textContent();
   await page.locator("#lab-container input[type=range]").first().evaluate(el=>{el.value="900";el.dispatchEvent(new Event("input",{bubbles:true}));});
@@ -85,24 +86,30 @@ try {
   // La bibliothèque reste privée : import local simulé et suppression.
   await page.goto(url+"#/bibliotheque",{waitUntil:"domcontentloaded"});
   await page.waitForSelector("#library-file");
+  assert.equal(await page.locator("#library-catalog .catalog-card").count(),7,"Sept matières communes disponibles immédiatement");
+  assert.equal(await page.locator("#library-catalog .catalog-art svg").count(),7,"Matières déjà illustrées");
+  await page.locator(".catalog-search input").fill("transformateur");
+  assert((await page.locator("#library-catalog .catalog-card").count())>=1,"Recherche par cours");
+  await page.locator(".catalog-search input").fill("");
   await page.locator("#library-file").setInputFiles({
     name:"2024_DT_PELE_donnee.pdf",mimeType:"application/pdf",
     buffer:Buffer.from("%PDF-1.4\n1 0 obj<</Type/Catalog>>endobj\n%%EOF")
   });
-  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 document"));
-  assert.match(await page.locator("#library-documents").textContent(),/Planificateur-électricien/);
+  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
+  assert.match(await page.locator("#library-documents").textContent(),/Examens/);
+  assert(!((await page.locator("#library-documents .document-info small").textContent()).includes("Planificateur")),"Documents mélangés par matière");
   await checkOverflow("bibliothèque privée");
   await page.reload({waitUntil:"domcontentloaded"});
-  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 document"));
+  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
   page.once("dialog",dialog=>dialog.accept());
   await page.locator("#library-documents .document-actions button").last().click();
-  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("0 document"));
+  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("0 PDF"));
   await page.locator("#library-file").setInputFiles({name:"Annales.zip",mimeType:"application/zip",buffer:zipFixture()});
-  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 document"));
-  assert.match(await page.locator("#library-documents").textContent(),/Électricien de montage CFC/,"Classement des annales ZIP");
-  await page.locator('a[href="#/examens"]').first().click();
+  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 PDF"));
+  assert.match(await page.locator("#library-documents").textContent(),/Examens/,"Classement commun des annales ZIP");
+  await page.locator('#library-catalog a[href="#/examens?d=Math%C3%A9matiques"]').click();
   await page.waitForSelector("#exam-setup-form");
-  await page.locator("#exam-domain").selectOption("Mathématiques");
+  assert.equal(await page.locator("#exam-domain").inputValue(),"Mathématiques","Préselection du domaine depuis le catalogue");
   await page.locator("#exam-setup-form button[type=submit]").click();
   for(let q=0;q<4;q++){
     await page.waitForSelector("#exam-answers .quiz-option:not([disabled])");
