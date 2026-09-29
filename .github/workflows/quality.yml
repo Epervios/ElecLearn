@@ -1,0 +1,16 @@
+name: Qualité ElecLearn
+on:
+  push:
+  pull_request:
+jobs:
+  statique:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Analyse syntaxique
+        run: npm run check
+      - name: Contrôles des chapitres et questionnaires
+        run: npm test

@@ -1,101 +1,153 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!doctype html>
+<html lang="fr-CH">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElecLearn - Apprentissage de l'Électrotechnique</title>
-    <link rel="stylesheet" href="css/style.css">
-
-    <!-- Configuration et chargement de MathJax -->
-    <script>
-        MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
-            },
-            svg: {
-                fontCache: 'global'
-            }
-        };
-    </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <!-- Fin de l'intégration MathJax -->
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0a1627">
+  <meta name="description" content="ElecLearn : parcours d'électrotechnique, exercices et laboratoires interactifs du F.E.T 1 au F.E.T 3.">
+  <title>ElecLearn · Laboratoire d'électrotechnique</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/style-v2.css">
+  <script>
+    window.MathJax = {tex:{inlineMath:[['\\(','\\)'],['$','$']],displayMath:[['\\[','\\]'],['$$','$$']],processEscapes:true},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script defer src="js/sql-wasm.js"></script>
+  <script defer src="js/questions.js"></script>
+  <script defer src="js/labs.js"></script>
+  <script defer src="js/approfondissements.js"></script>
+  <script defer src="js/app-v2.js"></script>
 </head>
 <body>
-    <header>
-        <h1>ElecLearn</h1>
-        <nav>
-            <!-- La navigation sera générée par JavaScript (setupNavigation) -->
-        </nav>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <div class="app-shell">
+    <header class="site-header">
+      <a href="#/accueil" class="brand" aria-label="ElecLearn, accueil">
+        <span class="brand-symbol" aria-hidden="true">E<span>∿</span></span>
+        <span><strong>ElecLearn</strong><small>LE LABORATOIRE ÉLECTROTECHNIQUE</small></span>
+      </a>
+      <nav class="top-nav" aria-label="Navigation principale">
+        <a href="#/accueil" data-nav="accueil">Accueil</a>
+        <a href="#/cours" data-nav="cours">Cours</a>
+        <a href="#/quiz" data-nav="quiz">Révisions</a>
+        <a href="#/progression" data-nav="progression">Progression</a>
+        <a href="#/glossaire" data-nav="glossaire">Glossaire</a>
+      </nav>
+      <span class="header-status" id="network-status" role="status">Cours disponibles</span>
     </header>
 
-    <main>
-        <section id="accueil">
-            <h2>Bienvenue sur ElecLearn</h2>
-            <p>Votre plateforme pour maîtriser l'électrotechnique et préparer vos examens.</p>
-            <!-- Le bouton pour aller au sommaire sera ajouté ici par JS -->
-        </section>
-
-        <!-- La section fascicules n'est plus utilisée pour la navigation principale -->
-        <!-- <section id="fascicules-container" style="display: none;"> ... </section> -->
-
-        <!-- Cette section sera utilisée pour afficher la liste principale des chapitres (Sommaire) -->
-        <section id="chapitres-container" style="display: none;">
-            <h2 id="chapitres-titre">Sommaire Principal</h2>
-            <div id="chapitres-liste">
-                <!-- Les chapitres principaux (15 fiches) seront listés ici -->
+    <main id="main" class="main-content" tabindex="-1">
+      <section id="accueil" class="view" aria-labelledby="home-title">
+        <div class="hero">
+          <div>
+            <p class="eyebrow">APPRENDRE · EXPÉRIMENTER · MAÎTRISER</p>
+            <h1 id="home-title">Comprendre l'électricité.<br><span>La mettre en pratique.</span></h1>
+            <p class="hero-intro">Un parcours de 15 chapitres en trois fascicules, des mises en situation et des simulateurs pour vérifier chaque notion.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#/cours">Explorer les cours <span aria-hidden="true">↗</span></a>
+              <a class="btn btn-secondary" href="#/quiz">Lancer une révision</a>
             </div>
-            <!-- Le bouton "Retour aux fascicules" n'est plus pertinent ici ou sera caché -->
-            <button id="retour-fascicules" style="display: none;">Retour aux fascicules</button>
-        </section>
+          </div>
+          <div class="hero-visual" aria-label="Schéma décoratif d'un circuit électrique">
+            <div class="scope-label">SIGNAL / 50 Hz</div>
+            <svg viewBox="0 0 410 260" role="img" aria-label="Trois signaux sinusoïdaux déphasés">
+              <defs><pattern id="scope-grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#6f9bb3" stroke-opacity=".15"/></pattern></defs>
+              <rect width="410" height="260" fill="url(#scope-grid)" rx="14"/>
+              <g fill="none" stroke-width="2.5" stroke-linecap="round">
+                <path d="M0 130 C34 130 34 43 68 43 S102 130 136 130 S170 217 204 217 S238 130 272 130 S306 43 340 43 S374 130 410 130" stroke="#3ce6d4"/>
+                <path d="M0 63 C34 63 34 150 68 150 S102 237 136 237 S170 150 204 150 S238 63 272 63 S306 150 340 150 S374 237 410 237" stroke="#9d91ff" opacity=".8"/>
+                <path d="M0 203 C34 203 34 116 68 116 S102 29 136 29 S170 116 204 116 S238 203 272 203 S306 116 340 116 S374 29 410 29" stroke="#ffbd78" opacity=".8"/>
+              </g>
+              <path d="M0 130H410" stroke="#fff" stroke-opacity=".25" stroke-dasharray="4 6"/>
+            </svg>
+            <div class="scope-meta"><span>U</span><span>120° / 3Φ</span><span>t →</span></div>
+          </div>
+        </div>
+        <div class="section-heading"><div><p class="eyebrow">VOTRE PARCOURS</p><h2>Trois fascicules. Quinze chapitres.</h2></div><span class="progress-overview" id="home-progress">Progression : 0 / 15</span></div>
+        <div id="home-fascicules" class="fascicule-grid"></div>
+        <div class="home-lower">
+          <div class="panel next-panel"><p class="eyebrow">REPRENDRE</p><h2 id="continue-title">Prêt pour la prochaine leçon ?</h2><p id="continue-description">Choisissez un fascicule pour commencer.</p><a class="text-link" id="continue-link" href="#/cours">Ouvrir le sommaire →</a></div>
+          <div class="panel"><p class="eyebrow">MÉTHODE</p><h2>Observer, calculer, comprendre.</h2><p>Des explications synthétiques, des expériences simulées sans danger et des questions commentées. Votre progression reste sur cet appareil.</p></div>
+        </div>
+      </section>
 
-        <section id="contenu-chapitre-container" style="display: none;">
-            <h2 id="contenu-chapitre-titre"></h2>
-            <div id="contenu-chapitre-texte">
-                <!-- Le contenu du chapitre (fichier fX.html) sera affiché ici -->
-            </div>
-            <button id="lancer-quiz-chapitre">Lancer le Quiz du Chapitre</button>
-            <button id="retour-chapitres" class="secondary">Retour au Sommaire</button>
-        </section>
+      <section id="cours" class="view" hidden aria-labelledby="courses-title">
+        <div class="page-intro"><p class="eyebrow">BIBLIOTHÈQUE</p><h1 id="courses-title">Tous les cours</h1><p>Parcourez les chapitres par fascicule, puis entraînez-vous à votre rythme.</p></div>
+        <div class="toolbar">
+          <div id="fet-filters" class="segmented" role="group" aria-label="Filtrer par fascicule">
+            <button type="button" data-fet="0" aria-pressed="true">Tous</button>
+            <button type="button" data-fet="1" aria-pressed="false">F.E.T 1</button>
+            <button type="button" data-fet="2" aria-pressed="false">F.E.T 2</button>
+            <button type="button" data-fet="3" aria-pressed="false">F.E.T 3</button>
+          </div>
+          <label class="search-field"><span class="sr-only">Rechercher un chapitre</span><input id="course-search" type="search" placeholder="Rechercher un chapitre…" autocomplete="off"></label>
+        </div>
+        <p id="course-count" class="list-caption" role="status"></p>
+        <div id="course-list" class="chapter-grid"></div>
+      </section>
 
-        <section id="quiz-container" style="display: none;">
-            <h2 id="quiz-titre">Quiz</h2>
-            <div id="question-area"></div>
-            <div id="options-area"></div>
-            <div id="feedback-area"></div>
-            <button id="prochaine-question" style="display: none;">Question suivante</button>
-            <button id="terminer-quiz" style="display: none;">Terminer le Quiz</button>
-            <button id="retour-contenu-chapitre-quiz" class="secondary">Retour au Chapitre</button>
-            <!-- Ce bouton de retour devra peut-être aussi gérer le retour au sommaire si quiz général -->
-        </section>
+      <section id="lecon" class="view" hidden aria-labelledby="lesson-title">
+        <div class="lesson-top"><a class="back-link" href="#/cours">← Tous les cours</a><span class="tag" id="lesson-fet"></span></div>
+        <div class="page-intro lesson-intro"><p class="eyebrow" id="lesson-num"></p><h1 id="lesson-title" tabindex="-1"></h1><p id="lesson-status" class="list-caption"></p></div>
+        <div class="lesson-layout">
+          <article class="panel lesson-article" id="lesson-content" aria-label="Texte de la leçon"><p>Chargement de la leçon…</p></article>
+          <aside class="lesson-aside" aria-label="Outils de la leçon">
+            <div class="panel aside-panel"><details id="toc-details" open><summary>Dans ce chapitre</summary><nav id="toc-list" class="toc" aria-label="Sommaire du chapitre"></nav></details></div>
+            <div class="panel aside-panel learn-card"><p class="eyebrow">VÉRIFIER LES ACQUIS</p><h2>Prêt à vous tester ?</h2><p>Répondez aux questions et consultez les explications après chaque réponse.</p><a class="btn btn-primary btn-block" id="lesson-quiz-link" href="#/quiz">Quiz du chapitre →</a></div>
+          </aside>
+        </div>
+        <section id="lab-container" class="lab-section" hidden aria-label="Laboratoire interactif"></section>
+        <div class="lesson-bottom"><a class="btn btn-secondary" href="#/cours">← Retour au sommaire</a><a class="btn btn-primary" id="lesson-bottom-quiz" href="#/quiz">Passer au quiz →</a></div>
+      </section>
 
-        <section id="resultats-quiz-container" style="display: none;">
-            <h2>Résultats du Quiz</h2>
-            <p id="score-final"></p>
-            <p id="recapitulatif-quiz"></p>
-            <button id="retour-contenu-chapitre-resultats" class="secondary">Retour au Chapitre</button>
-            <button id="retour-sommaire-resultats" class="secondary" style="display:none;">Retour au Sommaire</button>
-        </section>
+      <section id="quiz-setup" class="view" hidden aria-labelledby="quiz-setup-title">
+        <div class="page-intro"><p class="eyebrow">RÉVISIONS ACTIVES</p><h1 id="quiz-setup-title">Mettre les connaissances à l'épreuve</h1><p>Choisissez les thèmes et la durée. Les questions sont tirées des trois fascicules et accompagnées de corrections.</p></div>
+        <form id="quiz-form" class="panel setup-panel">
+          <label for="quiz-scope">Programme</label>
+          <select id="quiz-scope">
+            <option value="0">Tout le programme · F.E.T 1, 2 et 3</option>
+            <option value="1">F.E.T 1 · Fondamentaux</option>
+            <option value="2">F.E.T 2 · Magnétisme et alternatif</option>
+            <option value="3">F.E.T 3 · Triphasé, machines et éclairage</option>
+          </select>
+          <label for="quiz-length">Nombre de questions</label>
+          <select id="quiz-length"><option value="5">5 · Rapide</option><option value="10">10 · Standard</option><option value="15" selected>15 · Approfondi</option><option value="20">20 · Complet</option></select>
+          <p class="form-note">Les réponses sont corrigées immédiatement et votre résultat est enregistré sur cet appareil.</p>
+          <button class="btn btn-primary" type="submit">Commencer le quiz →</button>
+        </form>
+      </section>
 
-        <section id="glossaire-container" style="display: none;">
-            <h2>Glossaire</h2>
-            <input type="text" id="recherche-glossaire" placeholder="Rechercher un terme...">
-            <div id="glossaire-liste"></div>
-        </section>
+      <section id="quiz" class="view" hidden aria-labelledby="quiz-title">
+        <div class="page-intro quiz-intro"><p class="eyebrow" id="quiz-eyebrow">RÉVISION</p><h1 id="quiz-title">Questionnaire</h1><p id="quiz-count-text" role="status"></p></div>
+        <div class="quiz-progress" aria-hidden="true"><span id="quiz-progress-bar"></span></div>
+        <div class="panel quiz-panel">
+          <p id="quiz-reference" class="eyebrow"></p><h2 id="question-text" tabindex="-1"></h2>
+          <div id="quiz-options" class="quiz-options" role="group" aria-label="Choisir une réponse"></div>
+          <div id="quiz-feedback" class="quiz-feedback" role="status" aria-live="polite" hidden></div>
+          <button id="next-question" class="btn btn-primary" type="button" hidden>Question suivante →</button>
+        </div>
+        <p class="keyboard-hint">Astuce : utilisez les touches 1 à 4 pour répondre.</p>
+      </section>
 
-        <section id="progression-container" style="display: none;">
-            <h2>Ma Progression</h2>
-            <div id="progression-liste"></div>
-        </section>
+      <section id="resultats" class="view" hidden aria-labelledby="results-title">
+        <div class="panel result-panel"><p class="eyebrow">SÉANCE TERMINÉE</p><h1 id="results-title">Votre bilan</h1><div id="results-score" class="big-score"></div><p id="results-message"></p><div id="results-details" class="result-details"></div><div class="hero-actions"><a href="#/quiz" class="btn btn-primary">Nouvelle révision</a><a href="#/progression" class="btn btn-secondary">Ma progression</a><a href="#/cours" class="btn btn-secondary">Revoir les cours</a></div></div>
+      </section>
+
+      <section id="progression" class="view" hidden aria-labelledby="progress-title">
+        <div class="page-intro"><p class="eyebrow">TABLEAU DE BORD</p><h1 id="progress-title">Votre progression</h1><p>Vos chapitres parcourus et vos résultats, enregistrés localement sur cet appareil.</p></div>
+        <div id="progress-stats" class="stat-grid"></div><div id="progress-fascicules" class="progress-fascicules"></div>
+        <div class="section-heading"><h2>Historique des révisions</h2><button id="clear-progress" class="btn btn-quiet" type="button">Effacer mes données</button></div>
+        <div id="progress-history" class="history-list"></div>
+      </section>
+
+      <section id="glossaire" class="view" hidden aria-labelledby="glossary-title">
+        <div class="page-intro"><p class="eyebrow">RÉFÉRENCES</p><h1 id="glossary-title">Glossaire technique</h1><p>Retrouvez les termes essentiels des trois fascicules.</p></div>
+        <label class="search-field glossary-search"><span class="sr-only">Rechercher un terme technique</span><input id="glossary-search" type="search" placeholder="Rechercher une notion…" autocomplete="off"></label>
+        <p id="glossary-count" class="list-caption" role="status"></p><dl id="glossary-list" class="glossary-list"></dl>
+      </section>
     </main>
-
-    <footer>
-        <p>&copy; 2025 ElecLearn par Wizardaring</p>
-    </footer>
-
-    <script src="js/sql-wasm.js"></script>
-    <script src="js/main.js"></script>
+    <footer class="site-footer"><span>ElecLearn · Wizardaring</span><span>Outil pédagogique indépendant · 3 fascicules · 15 chapitres</span></footer>
+  </div>
 </body>
 </html>

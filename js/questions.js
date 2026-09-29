@@ -1,0 +1,61 @@
+/* Questions originales : notions alignées sur les chapitres des trois fascicules F.E.T.
+   Aucun exercice ni illustration des ouvrages n'est reproduit. */
+window.ElecQuestions = [
+  {c:1,q:"Dans un récepteur, quel est le sens conventionnel du courant ?",o:["Du pôle + vers le pôle −","Du pôle − vers le pôle +","Toujours de la terre vers la phase","Il ne possède aucun sens"],a:0,why:"Par convention, le courant circule du potentiel le plus élevé vers le plus faible dans un récepteur.",ref:"1.2"},
+  {c:1,q:"Quel matériau est normalement un semi-conducteur ?",o:["Cuivre","Verre","Silicium","Porcelaine"],a:2,why:"Le silicium est utilisé pour les diodes et transistors.",ref:"1.2"},
+  {c:2,q:"Une résistance de 12 Ω est soumise à 24 V. Quel courant la traverse ?",o:["0,5 A","2 A","12 A","288 A"],a:1,why:"Loi d'Ohm : I = U/R = 24/12 = 2 A.",ref:"2.4"},
+  {c:2,q:"Quelle unité correspond à la résistance électrique ?",o:["Volt","Watt","Ampère","Ohm"],a:3,why:"La résistance se mesure en ohms (Ω).",ref:"2.3"},
+  {c:3,q:"Deux résistances de 10 Ω sont montées en série. Quelle est la résistance équivalente ?",o:["5 Ω","10 Ω","20 Ω","100 Ω"],a:2,why:"En série, les résistances s'additionnent.",ref:"3.3"},
+  {c:3,q:"Deux résistances identiques de 20 Ω sont montées en parallèle. Quelle est la résistance équivalente ?",o:["10 Ω","20 Ω","40 Ω","400 Ω"],a:0,why:"Pour deux résistances identiques en parallèle, Req = R/2.",ref:"3.3"},
+  {c:4,q:"Une charge de 2 kW fonctionne durant 3 h. Quelle énergie consomme-t-elle ?",o:["0,67 kWh","5 kWh","6 kWh","6000 kWh"],a:2,why:"E = P × t = 2 × 3 = 6 kWh.",ref:"4.7"},
+  {c:4,q:"Une machine absorbe 1000 W et fournit 800 W utiles. Quel est son rendement ?",o:["20 %","80 %","100 %","125 %"],a:1,why:"η = Putile/Pabsorbée = 800/1000 = 0,8.",ref:"4.9"},
+  {c:5,q:"Comment varient les pertes Joule si le courant double, à résistance constante ?",o:["Elles sont divisées par deux","Elles doublent","Elles triplent","Elles quadruplent"],a:3,why:"Pertes Joule : P = R × I².",ref:"5.4"},
+  {c:5,q:"Pour un conducteur de section constante, que produit l'augmentation de sa longueur ?",o:["Une résistance plus grande","Une résistance plus faible","Une tension toujours nulle","Aucun effet"],a:0,why:"R = ρ × l/S : la résistance croît avec la longueur.",ref:"5.4"},
+  {c:6,q:"Que signifie une capacité nominale de batterie de 40 Ah ?",o:["40 W instantanés","40 V nominaux","Une quantité de charge nominale de 40 Ah","Une résistance de 40 Ω"],a:2,why:"L'ampère-heure est une unité de charge électrique, égale à 3600 coulombs.",ref:"6.1"},
+  {c:6,q:"Quel effet a le montage en série de deux éléments identiques de 1,5 V ?",o:["La tension reste à 1,5 V","La tension s'additionne : 3 V","La tension tombe à zéro","La capacité en Ah double nécessairement"],a:1,why:"En série avec polarités concordantes, les tensions s'additionnent.",ref:"6.4"},
+
+  {c:7,q:"Un flux de 0,02 Wb traverse perpendiculairement une surface de 0,01 m². Quelle est l'induction moyenne ?",o:["0,2 T","2 T","20 T","200 T"],a:1,why:"B = Φ/A = 0,02/0,01 = 2 T.",ref:"7.4"},
+  {c:7,q:"Une bobine de 500 spires est traversée par 0,2 A. Quelle est son excitation ?",o:["10 A-tours","50 A-tours","100 A-tours","2500 A-tours"],a:2,why:"L'excitation vaut N × I = 500 × 0,2 = 100 A-tours.",ref:"7.6"},
+  {c:7,q:"Quel principe fixe le sens de la tension induite ?",o:["Loi de Lenz","Loi de Joule","Loi de Coulomb seulement","Loi d'Ohm seulement"],a:0,why:"L'effet induit s'oppose à la variation de flux qui l'a produit.",ref:"7.8"},
+  {c:7,q:"Pourquoi feuillette-t-on les noyaux de nombreuses machines électriques ?",o:["Pour augmenter les courants de Foucault","Pour empêcher toute aimantation","Pour produire du courant continu","Pour réduire les pertes dues aux courants de Foucault"],a:3,why:"L'isolation entre tôles limite les boucles parcourues par les courants induits.",ref:"7.8"},
+
+  {c:8,q:"Un circuit RC a R = 10 kΩ et C = 100 µF. Quelle est sa constante de temps ?",o:["0,01 s","0,1 s","1 s","10 s"],a:2,why:"τ = R × C = 10 000 × 0,0001 = 1 s.",ref:"8.3"},
+  {c:8,q:"Au bout d'environ cinq constantes de temps, un condensateur en charge idéale est chargé à…",o:["Environ 20 %","Environ 50 %","Environ 63 %","Plus de 99 %"],a:3,why:"U(t)/Ufinal = 1 − exp(−5) ≈ 99,3 %.",ref:"8.3"},
+  {c:8,q:"Deux condensateurs idéaux de 10 µF sont montés en série. Quelle est la capacité équivalente ?",o:["5 µF","10 µF","20 µF","100 µF"],a:0,why:"1/Ceq = 1/C1 + 1/C2.",ref:"8.4"},
+  {c:8,q:"Quelle grandeur caractérise la capacité d'un condensateur ?",o:["L'induction en teslas","La capacité en farads","L'intensité en ampères-tours","La fréquence en hertz"],a:1,why:"La capacité C se mesure en farads (F).",ref:"8.3"},
+
+  {c:9,q:"Comment raccorde-t-on un voltmètre pour mesurer une tension aux bornes d'un récepteur ?",o:["En série","Sur le conducteur PE uniquement","En parallèle","À la place du fusible"],a:2,why:"Un voltmètre mesure une différence de potentiel entre deux points.",ref:"9.6"},
+  {c:9,q:"Comment raccorde-t-on un ampèremètre classique pour mesurer le courant d'une branche ?",o:["En série","En parallèle","À la terre","Sans aucun raccordement"],a:0,why:"Le courant de la branche doit traverser l'ampèremètre.",ref:"9.5"},
+  {c:9,q:"Quel risque présente l'ouverture du secondaire d'un transformateur d'intensité alimenté côté primaire ?",o:["Aucun","Une tension dangereuse peut apparaître","La fréquence devient nulle","Le facteur de puissance devient 1"],a:1,why:"Un TI ne doit pas avoir son secondaire ouvert lorsque le primaire est parcouru par un courant.",ref:"9.5"},
+  {c:9,q:"Que représente la résolution d'un instrument numérique ?",o:["Sa masse","Sa tension maximale uniquement","Le nombre de sondes","Le plus petit incrément d'affichage"],a:3,why:"La résolution est le pas minimal discernable par l'affichage.",ref:"9.3"},
+
+  {c:10,q:"Quelle est approximativement la valeur de crête d'une tension sinusoïdale de 230 V efficaces ?",o:["115 V","230 V","325 V","460 V"],a:2,why:"Û = Ueff × √2 ≈ 325 V.",ref:"10.3"},
+  {c:10,q:"À 50 Hz, quelle est la période d'une sinusoïde ?",o:["2 ms","20 ms","50 ms","500 ms"],a:1,why:"T = 1/f = 1/50 s = 0,02 s.",ref:"10.3"},
+  {c:10,q:"Une charge absorbe 230 V, 10 A, avec cos φ = 0,8. Quelle est sa puissance active ?",o:["1,84 kW","2,30 kW","2,875 kW","18,4 kW"],a:0,why:"P = U × I × cos φ = 230 × 10 × 0,8 = 1840 W.",ref:"10.14"},
+  {c:10,q:"Dans un condensateur idéal soumis à une tension alternative sinusoïdale, le courant…",o:["Est toujours nul","Est en retard de 90°","Est en phase","Est en avance de 90°"],a:3,why:"Le courant capacitif est en avance d'un quart de période sur la tension.",ref:"10.6"},
+
+  {c:11,q:"Pour un réseau triphasé équilibré 400/230 V, combien vaut approximativement la tension entre phase et neutre ?",o:["133 V","230 V","400 V","690 V"],a:1,why:"Uphase = Uréseau/√3 ≈ 231 V.",ref:"11.3"},
+  {c:11,q:"Dans une charge triphasée équilibrée en étoile, le courant de ligne est…",o:["Égal au courant de phase","√3 fois le courant de phase","Le tiers du courant de phase","Toujours nul"],a:0,why:"En étoile, chaque conducteur de ligne est en série avec sa branche.",ref:"11.4"},
+  {c:11,q:"Dans une charge équilibrée en triangle, le courant de ligne vaut…",o:["Iphase/3","Iphase","3 × Iphase","√3 × Iphase"],a:3,why:"En triangle équilibré, I ligne = √3 × I branche.",ref:"11.7"},
+  {c:11,q:"Que peut provoquer la coupure du neutre d'un réseau étoile alimentant des charges très déséquilibrées ?",o:["Des tensions de phase toujours identiques","L'annulation garantie des tensions","Un déplacement du point neutre et des surtensions sur certaines charges","Un rendement systématiquement de 100 %"],a:2,why:"Sans neutre, le point étoile flotte et les tensions des charges se redistribuent.",ref:"11.5"},
+
+  {c:12,q:"Un moteur asynchrone à quatre pôles alimenté à 50 Hz a quelle vitesse synchrone ?",o:["750 tr/min","1500 tr/min","3000 tr/min","6000 tr/min"],a:1,why:"n synchronisme = 60 × f/p, avec p = 2 paires de pôles.",ref:"12.1"},
+  {c:12,q:"Un moteur a une vitesse synchrone de 1500 tr/min et tourne à 1470 tr/min. Quel est son glissement ?",o:["2 %","5 %","10 %","30 %"],a:0,why:"s = (1500 − 1470)/1500 = 0,02.",ref:"12.3"},
+  {c:12,q:"Quelle fonction remplit principalement un relais thermique de moteur ?",o:["Augmenter le cos φ","Changer la fréquence","Protéger contre les surcharges prolongées","Mesurer les lux"],a:2,why:"La protection contre les courts-circuits relève d'une protection adaptée distincte.",ref:"12.4"},
+  {c:12,q:"À alimentation identique et pour un moteur approprié, le démarrage étoile-triangle vise surtout à…",o:["Supprimer le champ tournant","Supprimer tout courant de démarrage","Augmenter le couple par trois","Réduire le courant de démarrage et le couple"],a:3,why:"Le démarrage en étoile applique une tension de phase réduite aux enroulements.",ref:"12.5"},
+
+  {c:13,q:"Dans un moteur à courant continu classique, à quoi sert principalement le collecteur ?",o:["À refroidir le stator","À commuter le courant de l'induit","À transformer la masse en énergie","À remplacer le circuit magnétique"],a:1,why:"Les balais et le collecteur assurent la commutation du courant dans les enroulements du rotor.",ref:"13.1"},
+  {c:13,q:"Quel est le danger particulier d'un moteur série à courant continu fonctionnant sans charge mécanique ?",o:["Il peut s'emballer en vitesse","Il devient nécessairement synchrone","Sa vitesse tombe toujours à zéro","Son sens s'inverse toutes les secondes"],a:0,why:"La réduction du courant d'induit diminue le flux d'excitation et peut provoquer une vitesse excessive.",ref:"13.2"},
+  {c:13,q:"Quelle caractéristique distingue un moteur brushless ?",o:["Il nécessite un collecteur mécanique à lames","Il ne peut jamais tourner lentement","Il fonctionne sans champ magnétique","Sa commutation est réalisée électroniquement"],a:3,why:"Le moteur sans balais utilise une commande électronique de ses phases.",ref:"13.2"},
+  {c:13,q:"Pour inverser le sens d'un moteur DC à excitation séparée, on peut…",o:["Inverser simultanément induit et excitation","Augmenter seulement la tension","Inverser la polarité de l'induit seule","Supprimer tous les pôles"],a:2,why:"Inverser le courant d'induit par rapport au flux inverse le couple.",ref:"13.2"},
+
+  {c:14,q:"Un transformateur idéal possède 1000 spires au primaire et 100 spires au secondaire. Sous 230 V au primaire, quelle est la tension secondaire ?",o:["23 V","230 V","2300 V","10 V"],a:0,why:"U2 = U1 × N2/N1 = 230 × 100/1000.",ref:"14.2"},
+  {c:14,q:"Dans un transformateur idéal, quelle grandeur reste égale entre l'entrée et la sortie ?",o:["Le courant","La tension","Le nombre de spires","La puissance"],a:3,why:"Sans pertes, Pentrée = Psortie.",ref:"14.2"},
+  {c:14,q:"Pourquoi réalise-t-on le noyau d'un transformateur courant avec des tôles isolées ?",o:["Pour obtenir du courant continu directement","Pour limiter les pertes par courants de Foucault","Pour supprimer le flux magnétique","Pour faire varier automatiquement la fréquence"],a:1,why:"Les tôles isolées réduisent les boucles de courants induits.",ref:"14.1"},
+  {c:14,q:"Quel appareil abaisse le plus souvent le courant primaire élevé vers une valeur mesurable pour un compteur indirect ?",o:["Un fusible","Un condensateur de compensation","Un transformateur d'intensité (TI)","Un rhéostat"],a:2,why:"Le TI délivre au secondaire un courant proportionnel au courant primaire.",ref:"14.3"},
+
+  {c:15,q:"Un flux de 1000 lm est réparti uniformément sur 10 m². Quel est l'éclairement moyen ?",o:["10 lx","100 lx","1000 lx","10 000 lx"],a:1,why:"E = Φ/A = 1000/10 = 100 lx, dans ce modèle simplifié.",ref:"15.2"},
+  {c:15,q:"Quelle grandeur mesure-t-on en lumens ?",o:["La luminance","L'intensité lumineuse","La température de couleur","Le flux lumineux"],a:3,why:"Le flux lumineux Φ est exprimé en lumens.",ref:"15.2"},
+  {c:15,q:"Une LED produit 1200 lm pour 12 W consommés. Quelle est son efficacité lumineuse ?",o:["100 lm/W","12 lm/W","144 lm/W","1200 lm/W"],a:0,why:"Efficacité = flux/puissance = 1200/12 = 100 lm/W.",ref:"15.2"},
+  {c:15,q:"Quelle source produit de la lumière par électroluminescence d'un semi-conducteur ?",o:["Lampe à vapeur de sodium","Lampe halogène","LED","Lampe à incandescence"],a:2,why:"Une LED est une diode électroluminescente.",ref:"15.7"}
+];

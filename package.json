@@ -1,0 +1,10 @@
+{
+  "name": "eleclearn",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Application statique F.E.T 1/2/3",
+  "scripts": {
+    "test": "node tests/smoke.mjs",
+    "check": "node --check js/app-v2.js && node --check js/questions.js && node --check js/labs.js && node --check sw.js"
+  }
+}

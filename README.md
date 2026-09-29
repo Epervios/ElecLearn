@@ -1,91 +1,84 @@
-# ElecLearn - Application d'Apprentissage de l'Électrotechnique (Version Reconstruite)
+# ElecLearn v2 — Laboratoire d'électrotechnique
 
-ElecLearn est une application web statique conçue pour aider à l'apprentissage de l'électrotechnique. Cette version est structurée autour de 15 chapitres principaux couvrant divers aspects de la discipline.
+Application web pédagogique indépendante de Wizardaring, en français, dédiée à l'apprentissage de l'électrotechnique à partir du programme des trois fascicules F.E.T.
 
-L'application permet de naviguer à travers un sommaire de chapitres, de lire le contenu théorique (avec support des formules LaTeX via MathJax), de tester ses connaissances avec des quiz par chapitre ou un quiz général aléatoire, de consulter un glossaire et de suivre sa progression.
+## Parcours
 
-## Fonctionnalités Principales
+| Fascicule | Chapitres | Sujets |
+|---|---:|---|
+| F.E.T 1 | 1–6 | Notions et grandeurs fondamentales, résistances, énergie et puissance, effet Joule, sources chimiques |
+| F.E.T 2 | 7–10 | Magnétisme, électrostatique et condensateurs, instruments de mesure, alternatif monophasé |
+| F.E.T 3 | 11–15 | Triphasé, moteurs alternatifs, moteurs continus, transformateurs, éclairage |
 
-*   Navigation via un **Sommaire Principal** listant 15 chapitres clés.
-*   Affichage du contenu des chapitres (chargé depuis des fichiers HTML externes, par exemple `contenu/f1.html` à `contenu/f15.html`).
-*   Support du rendu des formules **LaTeX** via MathJax dans le contenu des chapitres.
-*   **Quiz par Chapitre** interactifs (QCM).
-*   **Quiz Général Aléatoire** tirant des questions de tous les chapitres.
-*   Feedback immédiat et explications pour les réponses aux quiz.
-*   Enregistrement des scores des quiz (distinction entre quiz de chapitre et quiz général).
-*   **Glossaire** des termes techniques avec fonction de recherche.
-*   **Historique des résultats** des quiz ("Ma Progression") pour suivre les performances.
-*   Interface utilisateur responsive (basique) et stylée.
+Les 15 contenus HTML existants dans le dossier contenu sont conservés. Les chapitres 7–15 bénéficient de **neuf compléments pédagogiques originaux avec exemples résolus**. Huit laboratoires interactifs permettent de manipuler des modèles simplifiés :
 
-## Technologies Utilisées
+| Chapitre | Laboratoire |
+|---|---|
+| 2 | Loi d'Ohm et puissance |
+| 7 | Champ magnétique d'une bobine idéale |
+| 8 | Charge d'un circuit RC |
+| 10 | Oscilloscope monophasé |
+| 11 | Équilibrage triphasé résistif et courant de neutre |
+| 12 | Vitesse synchrone et glissement d'un moteur |
+| 14 | Transformateur idéal |
+| 15 | Éclairement et efficacité lumineuse |
 
-*   **HTML5** pour la structure.
-*   **CSS3** pour le style et la mise en page.
-*   **JavaScript (ES6+)** pour la logique de l'application et l'interactivité.
-*   **SQL.js (sql-wasm.js)** : Bibliothèque JavaScript pour exécuter SQLite directement dans le navigateur. Les données sont stockées dans `ElecLearn.db`.
-*   **MathJax** : Pour le rendu des formules mathématiques en LaTeX.
+**Les simulations sont théoriques et ne constituent ni des instructions de travaux sous tension ni des dimensionnements réglementaires.**
 
-## Structure du Projet
+## Fonctionnalités
 
-```
-ElecLearn_App/  (ou le nom de votre dossier racine)
-├── css/
-│   └── style.css           # Styles principaux de l'application
-├── db/
-│   └── ElecLearn.db        # Base de données SQLite (schéma et données initiales des 15 chapitres)
-├── js/
-│   ├── main.js             # Logique JavaScript principale
-│   ├── sql-wasm.js         # Fichier de la bibliothèque SQL.js (À TÉLÉCHARGER)
-│   └── sql-wasm.wasm       # Fichier WebAssembly pour SQL.js (À TÉLÉCHARGER)
-├── contenu/
-│   ├── f1.html             # Fichier de contenu pour le Chapitre 1
-│   ├── f2.html             # Fichier de contenu pour le Chapitre 2
-│   └── ...                 # Jusqu'à f15.html et images éventuelles
-├── index.html              # Point d'entrée principal de l'application
-└── README.md               # Ce fichier
-```
+- Interface responsive pour ordinateur, tablette et smartphone, avec navigation basse sur mobile.
+- Parcours par fascicule, recherche par titre et mot-clé, sommaires cliquables dans les leçons.
+- 48 questions originales, réparties entre les 15 chapitres, avec corrections et références de sections ; les QCM SQLite historiques peuvent s'y ajouter.
+- Révisions ciblées par chapitre ou fascicule ; quiz général réparti entre les trois fascicules.
+- Progression sauvegardée via localStorage : consulté, acquis après au moins 70 % dans un quiz du chapitre, historique et moyenne.
+- Navigation directe partageable : #/cours/11, #/quiz/14, #/progression.
+- PWA installable et consultation hors connexion après une première visite réussie en HTTPS : interface, cours, simulateurs et questionnaires sont préchargés.
+- Navigation clavier, focus visible, zones tactiles adaptées et réduction des animations selon les préférences du système.
 
-## Installation et Lancement
+Aucun compte utilisateur ni serveur applicatif ne sont nécessaires. La progression n'est pas synchronisée entre appareils.
 
-ElecLearn est une application web statique.
+## Démarrer
 
-1.  **Prérequis : Fichiers SQL.js**
-    *   Téléchargez les fichiers `sql-wasm.js` et `sql-wasm.wasm` depuis la [page des releases de SQL.js sur GitHub](https://github.com/sql-js/sql.js/releases).
-    *   Placez ces deux fichiers dans le répertoire `js/` de votre projet.
-    *   *Note : Des fichiers placeholders sont présents dans le dépôt mais ils ne fonctionneront pas. Vous devez les remplacer par les vrais fichiers.*
+ElecLearn est une application statique : aucune compilation ni installation de dépendance n'est nécessaire. Dans le dossier du dépôt :
 
-2.  **Lancement (Fortement Recommandé : via un serveur HTTP local) :**
-    *   Pour que `fetch()` charge correctement `ElecLearn.db` et les fichiers de contenu des chapitres (par exemple, `contenu/f1.html`), il est essentiel de servir les fichiers via un serveur web local. Ouvrir `index.html` directement via `file:///` causera des erreurs CORS.
+    python -m http.server 8000
 
-    **Options pour un serveur web local simple :**
-    *   **Avec Python 3 :** Naviguez dans votre terminal jusqu'au répertoire racine du projet (`ElecLearn_App`) et exécutez :
-        ```bash
-        python -m http.server
-        ```
-        Ouvrez ensuite `http://localhost:8000` (ou le port indiqué) dans votre navigateur.
-    *   **Avec Node.js (`npx`) :** Naviguez dans votre terminal jusqu'au répertoire racine et exécutez :
-        ```bash
-        npx serve
-        ```
-        Ouvrez l'URL fournie (souvent `http://localhost:3000` ou `http://localhost:5000`).
-    *   **Avec l'extension "Live Server" de VS Code.**
+Ouvrir ensuite http://localhost:8000 dans un navigateur récent. L'ouverture directe de index.html via file:// ne permet pas le chargement fiable des cours et du cache hors connexion.
 
-## Personnalisation et Développement de Contenu
+Le déploiement sur GitHub Pages ou tout autre serveur statique HTTPS est possible, y compris dans un sous-chemin.
 
-1.  **Contenu des Chapitres (`contenu/fX.html`) :**
-    *   Créez/Modifiez les fichiers `f1.html` à `f15.html` dans le dossier `contenu/`.
-    *   Structurez votre texte avec des balises HTML sémantiques (`<h2>`, `<h3>`, `<p>`, `<ul>`, `<img>`, etc.).
-    *   Utilisez la syntaxe LaTeX pour les formules mathématiques (par exemple, `$E=mc^2$` pour en ligne, `$$U = R \\times I$$` pour en mode display). MathJax s'occupera du rendu.
-    *   Placez les images dans un sous-dossier (par exemple, `contenu/images/`) et référencez-les avec des chemins relatifs (par exemple, `src="images/mon_image.png"`).
+### Contrôles
 
-2.  **Base de Données (`db/ElecLearn.db`) :**
-    *   Utilisez un outil de gestion SQLite (par exemple, DB Browser for SQLite) pour modifier `ElecLearn.db`.
-    *   **Table `Chapitres` :** Les 15 chapitres principaux y sont déjà définis, pointant vers `contenu/f1.html` à `contenu/f15.html`. Vous pouvez modifier leurs titres si nécessaire.
-    *   **Table `Questions` et `OptionsReponses` :** Ajoutez ici les questions QCM pour chaque chapitre et pour le quiz général. Liez chaque question à un `chapitre_id` correspondant à l'ID du chapitre dans la table `Chapitres`.
-    *   **Table `Glossaire` :** Ajoutez les termes techniques et leurs définitions. Vous pouvez lier un terme à un `chapitre_id`.
-    *   **Table `ResultatsQuiz` :** Contient la colonne `type_quiz` ('chapitre' ou 'general') et `chapitre_id` (qui sera `NULL` pour les quiz généraux).
+Avec Node.js 22 :
 
-## Auteur
+    npm run check
+    npm test
 
-Ce projet a été développé par Jules (Agent IA).
-```
+Le second contrôle vérifie la présence des 15 cours, les 48 questions originales, les huit laboratoires, les neuf compléments originaux et le cache hors connexion. Voir tests/MANUAL-QA.md pour la recette sur écrans réels.
+
+## Structure
+
+- index.html — interface active.
+- css/style-v2.css — nouveau design. L'ancien fichier css/style.css est conservé.
+- js/app-v2.js — routage, apprentissage, révisions et progression.
+- js/questions.js — banque de 48 questions originales.
+- js/approfondissements.js — neuf modules pédagogiques F.E.T 2 et 3.
+- js/labs.js — huit laboratoires interactifs.
+- js/main.js — ancien contrôleur conservé pour référence, non chargé.
+- js/sql-wasm.js et js/sql-wasm.wasm — compatibilité avec les questions SQLite historiques.
+- contenu/f1.html à contenu/f15.html — quinze chapitres HTML existants.
+- db/ElecLearn.db — base historique optionnelle.
+- sw.js et manifest.webmanifest — installation et cache hors connexion.
+- tests — vérifications automatisées et manuelles.
+- .github/workflows/quality.yml — qualité sur les commits et pull requests.
+
+## Références, propriété intellectuelle et limites
+
+La structuration du programme s'appuie sur les fascicules *Électrotechnique* de la Fédération des écoles techniques (F.E.T.), volumes 1, 2 et 3. Les questions, compléments et laboratoires ajoutés sont des réalisations pédagogiques originales ; ils ne reproduisent ni les pages, ni les figures, ni les exercices des ouvrages.
+
+**Les manuels PDF F.E.T ne sont pas inclus dans ce dépôt public.** Leur reproduction ou diffusion nécessiterait une autorisation des ayants droit. ElecLearn n'est pas présenté comme une publication officielle de la F.E.T.
+
+La première visite nécessite un accès réseau pour installer le cache ; MathJax est actuellement fourni par un CDN, donc son premier rendu entièrement hors connexion n'est pas garanti. La suppression des données du site ou une session privée peut effacer la progression locale. Les résultats historiques uniquement stockés en mémoire dans l'ancienne version ne sont pas récupérables après fermeture.
+
+**Projet :** ElecLearn · Wizardaring.

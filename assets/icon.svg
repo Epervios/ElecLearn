@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="ElecLearn">
+ <rect width="512" height="512" fill="#081522" rx="94"/>
+ <rect x="74" y="74" width="364" height="364" rx="78" fill="#113e46" stroke="#43e3d3" stroke-width="12"/>
+ <path d="M158 154h177v35H202v50h115v35H202v51h133v35H158z" fill="#eefaff"/>
+ <path d="M286 255h89l-48 36h44l-109 85 48-81h-52z" fill="#43e3d3" stroke="#43e3d3" stroke-linejoin="round" stroke-width="7"/>
+</svg>
