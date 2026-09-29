@@ -34,7 +34,7 @@
 15. Importer des PDF locaux d'un support de cours et d'une annale 2024 ; contrôler le classement par domaine, année et métier.
 16. Ouvrir un PDF dans l'aperçu, puis dans un onglet séparé. Fermer l'aperçu et supprimer le document ; aucun fichier ne doit apparaître dans les requêtes sortantes.
 17. Recharger la bibliothèque : les PDF restent présents sur cet appareil. Vérifier l'effet du mode navigation privée et d'un quota insuffisant.
-18. Décompresser l'archive d'annales avant import ; un ZIP ne doit pas être accepté comme PDF.
+18. Importer directement une archive ZIP classique contenant des PDF : les fichiers doivent être extraits et classés localement. Si le navigateur ne prend pas en charge la décompression ZIP, vérifier le message de repli et l’import des PDF extraits.
 19. Lancer un entraînement professionnel général et ciblé sur les mathématiques ; contrôler les corrections et la conservation des résultats.
 20. Tester le catalogue sur iPhone Safari, Android Chrome, tablette et bureau : les prévisualisations PDF dépendent des capacités natives de chaque navigateur.
 21. S'assurer que les neuf documents complets et les 44 sujets officiels ne sont jamais copiés dans GitHub Pages, dans le cache du service worker ni dans un artefact CI.

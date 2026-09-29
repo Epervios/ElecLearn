@@ -1,7 +1,22 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import { deflateRawSync } from "node:zlib";
 import { chromium } from "playwright";
 
+// ZIP synthétique (un PDF minimal, sans document externe) pour vérifier la décompression privée.
+function zipFixture(){
+  const name=Buffer.from("2023_TS_ELM_donnee.pdf","utf-8"),pdf=Buffer.from("%PDF-1.4\n%%EOF\n");
+  const compressed=deflateRawSync(pdf);
+  const local=Buffer.alloc(30),central=Buffer.alloc(46),end=Buffer.alloc(22);
+  local.writeUInt32LE(0x04034b50,0);local.writeUInt16LE(20,4);local.writeUInt16LE(8,8);
+  local.writeUInt32LE(compressed.length,18);local.writeUInt32LE(pdf.length,22);local.writeUInt16LE(name.length,26);
+  const offset=local.length+name.length+compressed.length;
+  central.writeUInt32LE(0x02014b50,0);central.writeUInt16LE(20,4);central.writeUInt16LE(20,6);central.writeUInt16LE(8,10);
+  central.writeUInt32LE(compressed.length,20);central.writeUInt32LE(pdf.length,24);central.writeUInt16LE(name.length,28);
+  end.writeUInt32LE(0x06054b50,0);end.writeUInt16LE(1,8);end.writeUInt16LE(1,10);
+  end.writeUInt32LE(central.length+name.length,12);end.writeUInt32LE(offset,16);
+  return Buffer.concat([local,name,compressed,central,name,end]);
+}
 const url=process.env.ELECLEARN_URL||"http://127.0.0.1:8000/";
 const browser=await chromium.launch({headless:true});
 fs.mkdirSync("tests/artifacts",{recursive:true});
@@ -82,6 +97,9 @@ try {
   page.once("dialog",dialog=>dialog.accept());
   await page.locator("#library-documents .document-actions button").last().click();
   await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("0 document"));
+  await page.locator("#library-file").setInputFiles({name:"Annales.zip",mimeType:"application/zip",buffer:zipFixture()});
+  await page.waitForFunction(()=>document.querySelector("#library-count")?.textContent?.startsWith("1 document"));
+  assert.match(await page.locator("#library-documents").textContent(),/Électricien de montage CFC/,"Classement des annales ZIP");
   await page.locator('a[href="#/examens"]').first().click();
   await page.waitForSelector("#exam-setup-form");
   await page.locator("#exam-domain").selectOption("Mathématiques");

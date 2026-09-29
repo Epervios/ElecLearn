@@ -25,7 +25,7 @@ const app = read('js/app-v2.js');
 for (const marker of ['localStorage','hashchange','questionsForChapter','renderLesson','serviceWorker','renderGlossary'])
   assert(app.includes(marker), 'Fonctionnalité absente : '+marker);
 const html = read('index.html');
-for (const path of ['css/style-v2.css','js/questions.js','js/labs.js','js/approfondissements.js','js/illustrations.js','js/metier-questions.js','js/exams.js','js/library.js','js/app-v2.js','manifest.webmanifest']) {
+for (const path of ['css/style-v2.css','js/questions.js','js/labs.js','js/approfondissements.js','js/illustrations.js','js/metier-questions.js','js/exams.js','js/library.js','js/zip-reader.js','js/zip-reader.js','js/app-v2.js','manifest.webmanifest']) {
   assert(html.includes(path), 'Ressource non référencée : '+path);
   assert(fs.existsSync(file(path)), 'Ressource absente : '+path);
 }
@@ -67,3 +67,6 @@ assert.match(read('index.html'),/id="examens"/);
 const lib=read('js/library.js');
 assert(lib.includes("indexedDB")&&!lib.includes('fetch('),"La bibliothèque privée n'envoie pas les PDF au réseau");
 console.log("OK — 15 illustrations vectorielles, 28 questions inédites, bibliothèque privée uniquement locale.");
+
+assert(read("js/zip-reader.js").includes("DecompressionStream"),"Décompression ZIP locale absente");
+console.log("OK — importation locale des archives ZIP activée.");

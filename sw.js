@@ -1,8 +1,8 @@
 /* Ressources locales uniquement, aucun manuel PDF n'est distribué. */
-const CACHE = "eleclearn-v2-visual-library-20260929";
+const CACHE = "eleclearn-v2-visual-library-zip-20260929";
 const ASSETS = [
   "./","./index.html","./css/style-v2.css","./manifest.webmanifest","./assets/icon.svg",
-  "./js/app-v2.js","./js/questions.js","./js/labs.js","./js/approfondissements.js","./js/illustrations.js","./js/metier-questions.js","./js/exams.js","./js/library.js","./js/sql-wasm.js","./js/sql-wasm.wasm",
+  "./js/app-v2.js","./js/questions.js","./js/labs.js","./js/approfondissements.js","./js/illustrations.js","./js/metier-questions.js","./js/exams.js","./js/library.js","./js/zip-reader.js","./js/sql-wasm.js","./js/sql-wasm.wasm",
   "./db/ElecLearn.db",
   "./contenu/f1.html","./contenu/f2.html","./contenu/f3.html","./contenu/f4.html",
   "./contenu/f5.html","./contenu/f6.html","./contenu/f7.html","./contenu/f8.html",

@@ -66,9 +66,20 @@
    const selection=Array.from(files||[]);
    if(!selection.length)return;
    const pdfs=selection.filter(f=>f.type==="application/pdf"||/\.pdf$/i.test(f.name));
-   if(pdfs.length!==selection.length)setStatus("Les archives ZIP doivent être décompressées avant l'importation. Seuls les fichiers PDF ont été sélectionnés.");
-   if(!pdfs.length)return;
-   let imported=0,errors=[];
+   const archives=selection.filter(f=>/\.zip$/i.test(f.name)||f.type==="application/zip");
+   const errors=[];
+   for(const archive of archives){
+     setStatus("Décompression de "+archive.name+" sur cet appareil…");
+     try{
+       const extracted=await window.ElecZip.extract(archive);
+       pdfs.push(...extracted);
+     }catch(e){errors.push(archive.name+" : "+(e?.message||e));}
+   }
+   if(!pdfs.length){
+     setStatus(errors.length?errors.join(" · "):"Sélectionnez des PDF ou une archive ZIP contenant des PDF.",true);
+     return;
+   }
+   let imported=0;
    for(const file of pdfs){
      setStatus("Importation privée "+(imported+errors.length+1)+"/"+pdfs.length+" : "+file.name);
      try{
@@ -140,8 +151,8 @@
    const heading=el("div","library-feature-head");
    heading.innerHTML='<div><p class="eyebrow">IMPORT LOCAL</p><h2>Vos documents sur cet appareil</h2><p>Choisissez les PDF à importer. Aucun fichier n’est envoyé au site ni ajouté à GitHub. Les données restent dans le stockage local de votre navigateur.</p></div>';
    const importBox=el("div","panel library-upload");
-   importBox.innerHTML='<label class="btn btn-primary" for="library-file">Sélectionner des PDF</label><input class="sr-only" id="library-file" type="file" accept=".pdf,application/pdf" multiple>'+
-     '<p>Vous pouvez sélectionner plusieurs fichiers à la fois ou les déposer ici. Pour les archives ZIP d’examens, décompressez-les avant l’importation.</p>'+
+   importBox.innerHTML='<label class="btn btn-primary" for="library-file">PDF ou archive ZIP</label><input class="sr-only" id="library-file" type="file" accept=".pdf,.zip,application/pdf,application/zip" multiple>'+
+     '<p>Sélectionnez plusieurs PDF ou importez directement une archive ZIP contenant des PDF. Le traitement reste sur cet appareil ; si votre navigateur ne peut pas décompresser le ZIP, extrayez les PDF avant l’importation.</p>'+
      '<p class="list-caption" id="library-status" role="status" aria-live="polite">Aucun document ne sera publié automatiquement.</p>';
    const filters=el("div","toolbar library-toolbar");
    filters.innerHTML='<label class="search-field"><span class="sr-only">Rechercher un document</span><input id="library-search" type="search" placeholder="Titre, année ou profession…"></label>'+
