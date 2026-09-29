@@ -14,7 +14,11 @@ try {
   page.on("pageerror",err=>errors.push(err.message));
   await page.route("https://cdn.jsdelivr.net/**",r=>r.fulfill({status:200,contentType:"application/javascript",body:""}));
   async function checkOverflow(label){
-   const size=await page.evaluate(()=>({w:innerWidth,body:document.documentElement.scrollWidth}));
+   const size=await page.evaluate(()=>({
+    w:innerWidth,body:document.documentElement.scrollWidth,
+    elements:[...document.querySelectorAll("body *")].map(el=>{const r=el.getBoundingClientRect();return {tag:el.tagName,id:el.id,cls:String(el.className?.baseVal??el.className??"").slice(0,50),right:Math.round(r.right),width:Math.round(r.width)}}).filter(x=>x.width>0&&x.right>innerWidth+1).slice(0,8)
+   }));
+   if(size.body>size.w+1)await page.screenshot({path:"tests/artifacts/overflow-"+name+".png",fullPage:true});
    assert(size.body<=size.w+1,name+" / "+label+" : débordement "+JSON.stringify(size));
   }
   await page.goto(url,{waitUntil:"domcontentloaded"});

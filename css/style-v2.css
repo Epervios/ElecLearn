@@ -226,3 +226,8 @@ input[type="range"]{display:block;width:100%;accent-color:var(--accent);min-heig
 .worked-panel h2{font-size:1.4rem;color:#43e3d3;margin:0 0 16px}
 .lesson-article .worked-panel h3{border:0;padding:0;margin:20px 0 9px;font-size:1.04rem;color:#eafaff}
 .worked-formula{font-size:clamp(.82rem,1.7vw,.99rem);font-family:Consolas,monospace;font-weight:700;color:#43e3d3;overflow-x:auto;padding:15px;border:1px solid #416f73;border-radius:9px;background:#0a2630;margin:17px 0}
+
+/* Les titres longs des chapitres ne doivent pas élargir le viewport à 320 px. */
+.page-intro h1,.lesson-article h2,.lesson-article h3,.lesson-article h4{overflow-wrap:anywhere;hyphens:auto}
+.lesson-aside,.lab-controls,.lab-output,.aside-panel{min-width:0}
+@media(max-width:360px){.page-intro h1{font-size:clamp(1.6rem,7.6vw,2rem)}}
