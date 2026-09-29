@@ -44,6 +44,11 @@ try {
    const box=await page.locator(".top-nav").boundingBox();
    assert(box&&box.y>=height-100,"Navigation basse mobile");
    assert.equal(await page.locator(".top-nav a").count(),5);
+   await page.locator('.top-nav a[href="#/bibliotheque"]').click();
+   await page.waitForSelector("#library-catalog .catalog-card");
+   assert.equal(await page.locator("#library-catalog .catalog-card").count(),7,"Bibliothèque accessible par le bouton mobile");
+   await page.locator('.top-nav a[href="#/accueil"]').click();
+   await page.waitForSelector("#home-fascicules .fascicule-card");
   }
   await page.locator(".fascicule-card.fet-2").click();
   await page.waitForSelector("#course-list .chapter-card");
